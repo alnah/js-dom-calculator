@@ -3,6 +3,9 @@ let operator = "";
 let secondOperand = "";
 let result = "";
 
+listenClicks()
+listenKeys()
+
 function addNumbers(firstOperand, secondOperand = 0) {
   return firstOperand + secondOperand;
 }
@@ -53,5 +56,27 @@ function operate(firstOperand, operator, secondOperand = "") {
       return getOpposite(firstOperand);
     default:
       return `Unknown operator: "${operator}"`
+  }
+}
+
+function listenKeys() {
+  window.addEventListener("keydown", e => {
+    const key = document.querySelector(`.btn[data-key="${e.key}"]`);
+    if (key) {
+      console.log(key.id);
+      // TODO: add a function to display
+      // TODO: add a function to store value
+    }
+  });
+}
+
+function listenClicks() {
+  const buttons = document.querySelectorAll(".btn");
+  for (let button of buttons) {
+    button.addEventListener("click", e => {
+      console.log(e.target.id)
+      // TODO: add a function to display
+      // TODO: add a function to store value
+    });
   }
 }
