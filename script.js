@@ -1,8 +1,7 @@
 let firstOperand = "";
 let operator = "";
 let secondOperand = "";
-populateDisplay();
-
+let result = "";
 
 function addNumbers(firstOperand, secondOperand = 0) {
   return firstOperand + secondOperand;
@@ -54,23 +53,5 @@ function operate(firstOperand, operator, secondOperand = "") {
       return getOpposite(firstOperand);
     default:
       return `Unknown operator: "${operator}"`
-  }
-}
-
-function populateDisplay() {
-  listenNumbers();
-}
-
-function listenNumbers() {
-  let display = document.querySelector("#display");
-  const numbers = document.querySelectorAll(".number")
-  for (const number of numbers) {
-    number.addEventListener("click", () => {
-      display.textContent += number.textContent;
-      if (display.textContent[0] === "0") {
-        display.textContent = display.textContent.slice(1);
-        firstOperand = display.textContent;
-      }
-    })
   }
 }
