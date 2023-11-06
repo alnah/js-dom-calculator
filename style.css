@@ -22,6 +22,7 @@ html {
 }
 
 body {
+  background: black;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -43,6 +44,7 @@ img {
 }
 
 #display {
+  color: white;
   font-family: "Apple Symbols", serif;
   border: 5px solid lightgray;
   border-radius: 1rem;
