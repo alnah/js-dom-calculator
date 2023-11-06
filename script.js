@@ -1,16 +1,16 @@
-function addNumbers(a, b) {
+function addNumbers(a, b = 0) {
   return a + b;
 }
 
-function subtractNumbers(a, b) {
+function subtractNumbers(a, b = 0) {
   return a - b;
 }
 
-function multiplyNumbers(a, b) {
+function multiplyNumbers(a, b = 1) {
   return a * b;
 }
 
-function divideNumbers(a, b) {
+function divideNumbers(a, b = 1) {
   return b === 0 ? "Error" : a / b;
 }
 
@@ -43,13 +43,3 @@ function operate(a, operator, b = "") {
       return `Unknown operator: "${operator}"`
   }
 }
-
-console.table([
-  operate("2", "+", "3"),
-  operate("3", "-", "2"),
-  operate("3", "*", "3"),
-  operate("9","/", "0"),
-  operate("50", "%"),
-  operate("25", "+/-"),
-  operate("25", "$"),
-])
