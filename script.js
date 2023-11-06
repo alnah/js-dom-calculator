@@ -74,7 +74,8 @@ function listenClicks() {
   const buttons = document.querySelectorAll(".btn");
   for (let button of buttons) {
     button.addEventListener("click", e => {
-      console.log(e.target.id)
+      const click = e.target.id;
+      console.log(click);
       // TODO: add a function to display
       // TODO: add a function to store value
     });
