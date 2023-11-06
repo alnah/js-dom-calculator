@@ -42,10 +42,27 @@ img {
   font-size: 3rem;
 }
 
+#display {
+  font-family: "Apple Symbols", serif;
+  border: 5px solid lightgray;
+  border-radius: 1rem;
+  padding: 1rem;
+  align-items: center;
+  text-align: right;
+  text-transform: uppercase;
+}
 .btn {
   min-width: 3rem;
 }
 
-#0 {
-  min-width: 6rem;
+.option {
+  background: lightcoral;
+}
+
+.operator {
+  background: lightblue;
+}
+
+#\= {
+  background: orange;
 }
