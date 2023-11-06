@@ -14,6 +14,10 @@ function divideNumbers(a, b = 1) {
   return b === 0 ? "Error" : a / b;
 }
 
+function powerNumber(a, b = 0) {
+  return a ** b;
+}
+
 function getPercentage(a) {
   return a / 100;
 }
@@ -26,7 +30,7 @@ function operate(a, operator, b = "") {
   // b is optional for .getPercentage and .getOpposite
   a = Number(a);
   b = Number(b);
-  switch(operator) {
+  switch (operator) {
     case "+":
       return addNumbers(a, b);
     case "-":
@@ -35,6 +39,8 @@ function operate(a, operator, b = "") {
       return multiplyNumbers(a, b);
     case "/":
       return divideNumbers(a, b);
+    case "^":
+      return powerNumber(a);
     case "%":
       return getPercentage(a);
     case "+/-":
