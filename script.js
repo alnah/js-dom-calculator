@@ -1,50 +1,50 @@
-function addNumbers(a, b = 0) {
-  return a + b;
+function addNumbers(firstOperand, secondOperand = 0) {
+  return firstOperand + secondOperand;
 }
 
-function subtractNumbers(a, b = 0) {
-  return a - b;
+function subtractNumbers(firstOperand, secondOperand = 0) {
+  return firstOperand - secondOperand;
 }
 
-function multiplyNumbers(a, b = 1) {
-  return a * b;
+function multiplyNumbers(firstOperand, secondOperand = 1) {
+  return firstOperand * secondOperand;
 }
 
-function divideNumbers(a, b = 1) {
-  return b === 0 ? "Error" : a / b;
+function divideNumbers(firstOperand, secondOperand = 1) {
+  return secondOperand === 0 ? "Error" : firstOperand / secondOperand;
 }
 
-function powerNumber(a, b = 0) {
-  return a ** b;
+function powerNumber(firstOperand, secondOperand = 0) {
+  return firstOperand ** secondOperand;
 }
 
-function getPercentage(a) {
-  return a / 100;
+function getPercentage(firstOperand) {
+  return firstOperand / 100;
 }
 
-function getOpposite(a) {
-  return -a;
+function getOpposite(firstOperand) {
+  return -firstOperand;
 }
 
-function operate(a, operator, b = "") {
-  // b is optional for .getPercentage and .getOpposite
-  a = Number(a);
-  b = Number(b);
+function operate(firstOperand, operator, secondOperand = "") {
+  // secondOperand is optional for .getPercentage and .getOpposite
+  firstOperand = Number(firstOperand);
+  secondOperand = Number(secondOperand);
   switch (operator) {
     case "+":
-      return addNumbers(a, b);
+      return addNumbers(firstOperand, secondOperand);
     case "-":
-      return subtractNumbers(a, b);
+      return subtractNumbers(firstOperand, secondOperand);
     case "*":
-      return multiplyNumbers(a, b);
+      return multiplyNumbers(firstOperand, secondOperand);
     case "/":
-      return divideNumbers(a, b);
+      return divideNumbers(firstOperand, secondOperand);
     case "^":
-      return powerNumber(a);
+      return powerNumber(firstOperand);
     case "%":
-      return getPercentage(a);
+      return getPercentage(firstOperand);
     case "+/-":
-      return getOpposite(a);
+      return getOpposite(firstOperand);
     default:
       return `Unknown operator: "${operator}"`
   }
