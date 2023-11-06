@@ -22,11 +22,34 @@ function getOpposite(a) {
   return -a;
 }
 
+function operate(a, operator, b = "") {
+  // b is optional for .getPercentage and .getOpposite
+  a = Number(a);
+  b = Number(b);
+  switch(operator) {
+    case "+":
+      return addNumbers(a, b);
+    case "-":
+      return subtractNumbers(a, b);
+    case "*":
+      return multiplyNumbers(a, b);
+    case "/":
+      return divideNumbers(a, b);
+    case "%":
+      return getPercentage(a);
+    case "+/-":
+      return getOpposite(a);
+    default:
+      return `Unknown operator: "${operator}"`
+  }
+}
+
 console.table([
-  addNumbers(3.2, 1),
-  subtractNumbers(3, 1),
-  multiplyNumbers(3, 2.5),
-  divideNumbers(3, 0),
-  getPercentage(25),
-  getOpposite(-30),
+  operate("2", "+", "3"),
+  operate("3", "-", "2"),
+  operate("3", "*", "3"),
+  operate("9","/", "0"),
+  operate("50", "%"),
+  operate("25", "+/-"),
+  operate("25", "$"),
 ])
