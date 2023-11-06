@@ -1,20 +1,18 @@
+/*CSS Boilerplate*/
+* {
+  border: none;
+}
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-* {
-  border: none;
-}
-
 html {
   font-size: 62.5%; /* (62.5/100) * 16px = 10px */
-}
-
-html {
-  -webkit-text-size-adjust: none; /* for iOS Safari */
   text-size-adjust: none; /* for other mobile browsers */
+  -webkit-text-size-adjust: none; /* for iOS Safari */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -23,8 +21,13 @@ html {
   }
 }
 
-:focus:not(:focus-visible) {
-  outline: none;
+body {
+  font-size: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
 }
 
 button {
@@ -34,8 +37,4 @@ button {
 img {
   display: block;
   max-width: 100%;
-}
-
-body {
-  font-size: 2rem;
 }
