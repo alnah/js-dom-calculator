@@ -18,31 +18,33 @@ function reset(expression) {
 
 function add(expression) {
   return (!expression.second.stored)
-    ? expression.first.value
+    ? expression.first.value + expression.first.value
     : expression.first.value + expression.second.value;
 }
 
 function subtract(expression) {
   return (!expression.second.stored)
-    ? expression.first.value
+    ? expression.first.value - expression.first.value
     : expression.first.value - expression.second.value;
 }
 
 function multiply(expression) {
   return (!expression.second.stored)
-    ? expression.first.value
+    ? expression.first.value * expression.first.value
     : expression.first.value * expression.second.value;
 }
 
 function divide(expression) {
-  return expression.second.value === 0
-    ? "Error"
-    : expression.first.value / expression.second.value;
+  return expression.second.value
+    ? expression.second.value === 0
+      ? "Error"
+      : expression.first.value / expression.second.value
+    : expression.first.value / expression.first.value;
 }
 
 function power(expression) {
   return (!expression.second.stored)
-    ? expression.first.value
+    ? expression.first.value ** expression.first.value
     : expression.first.value ** expression.second.value;
 }
 
@@ -53,11 +55,9 @@ function percentage(expression) {
 }
 
 function opposite(expression) {
-  if (expression.second.stored) {
-    expression.second.value = expression.second.value * -1;
-  } else if (expression.first.stored) {
-    expression.first.value = expression.first.value * -1;
-  }
+  return expression.second.stored
+    ? expression.second.value * -1
+    : expression.first.value * -1
 }
 
 function operate(expression) {
@@ -138,8 +138,12 @@ function bind(event) {
       expression.operator.value = event;
       expression.operator.stored = true;
       expression.second.start = true;
-    } else if (expression.result.stored) {
+    }
+    if (expression.operator.stored && expression.second.stored) {
       expression.first.value = String(operate(expression));
+      expression.second.value = "0";
+      expression.second.start = false;
+      expression.second.stored = false;
       expression.result.stored = false;
     }
   }
