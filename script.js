@@ -75,10 +75,13 @@ function round(number) {
 }
 
 function opposite(expression) {
-  if (expression.second.stored) {
-    expression.second.value = String(expression.second.value * -1)
+  if (expression.result.stored) {
+    expression.result.value = String(expression.result.value * -1);
+  }
+  else if (expression.second.stored) {
+    expression.second.value = String(expression.second.value * -1);
   } else if (expression.first.stored) {
-    expression.first.value = String(expression.first.value * -1)
+    expression.first.value = String(expression.first.value * -1);
   }
 }
 
