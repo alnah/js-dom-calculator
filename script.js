@@ -77,9 +77,7 @@ function listenKeys() {
     const keydown = document.querySelector(`.btn[data-key="${e.key}"]`);
     if (keydown) {
       const key = keydown.id;
-      if (key in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
-        bind(key);
-      }
+      bind(key);
     }
   });
 }
