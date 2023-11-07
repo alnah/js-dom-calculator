@@ -8,6 +8,7 @@ let expression = {
 listenClicks()
 listenKeys()
 
+
 function reset(expression) {
   for (let key in expression) {
     expression[key].value = "0";
@@ -15,6 +16,7 @@ function reset(expression) {
   }
   expression.second.start = false
 }
+
 
 function add(expression) {
   return (!expression.second.stored)
@@ -48,18 +50,6 @@ function power(expression) {
     : expression.first.value ** expression.second.value;
 }
 
-function percentage(expression) {
-  return (!expression.second.stored)
-    ? expression.first.value / 100
-    : expression.second.value / 100;
-}
-
-function opposite(expression) {
-  return expression.second.stored
-    ? expression.second.value * -1
-    : expression.first.value * -1
-}
-
 function operate(expression) {
   for (let key in expression) {
     if (["first", "second"].includes(key)) {
@@ -77,10 +67,22 @@ function operate(expression) {
       return divide(expression);
     case "^":
       return power(expression);
-    case "%":
-      return percentage(expression);
-    case "+/-":
-      return opposite(expression);
+  }
+}
+
+function opposite(expression) {
+  if (expression.second.stored) {
+    expression.second.value = String(expression.second.value * -1)
+  } else if (expression.first.stored) {
+    expression.first.value = String(expression.first.value * -1)
+  }
+}
+
+function percentage(expression) {
+  if (expression.second.stored) {
+    expression.second.value = String(expression.second.value / 100)
+  } else if (expression.first.stored) {
+    expression.first.value = String(expression.first.value / 100)
   }
 }
 
@@ -129,9 +131,11 @@ function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
     store(event);
   }
-  if (["+/-", "%"].includes(event)) {
-    expression.operator.value = event;
-    expression.operator.stored = true;
+  if (event === "+/-") {
+    opposite(expression);
+  }
+  if (event === "%") {
+    percentage(expression);
   }
   if (["+", "-", "/", "*", "^"].includes(event)) {
     if (!expression.result.stored) {
