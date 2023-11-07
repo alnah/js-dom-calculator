@@ -6,6 +6,13 @@ let result = "";
 listenClicks()
 listenKeys()
 
+function reset() {
+  firstOperand = "0";
+  operator = "";
+  secondOperand = "0";
+  result = "0";
+}
+
 function add(firstOperand, secondOperand = 0) {
   return firstOperand + secondOperand;
 }
@@ -62,12 +69,6 @@ function display(number) {
   display.textContent = String(Math.round(number * 100) / 100);
 }
 
-function reset() {
-  firstOperand = "0";
-  operator = "";
-  secondOperand = "0";
-}
-
 function storeFirstOperand(number) {
   if (firstOperand === "0") {
     firstOperand = number;
@@ -96,18 +97,15 @@ function listenClicks() {
   }
 }
 
-function bind(target) {
-  if (target in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
-    storeFirstOperand(target);
+function bind(event) {
+  if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
+    storeFirstOperand(event);
   }
-  if (target === "ac") {
+  if (event === "ac") {
     reset()
   }
-  if (target === "+/-") {
-    firstOperand = operate(firstOperand, target)
-  }
-  if (target === "%") {
-    firstOperand = operate(firstOperand, target);
+  if (["+/-", "%"].includes(event)) {
+    firstOperand = operate(firstOperand, event);
   }
   display(firstOperand);
 }
