@@ -101,11 +101,11 @@ function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
     storeFirstOperand(event);
   }
-  if (event === "ac") {
-    reset()
-  }
   if (["+/-", "%"].includes(event)) {
     firstOperand = operate(firstOperand, event);
+  }
+  if (event === "ac") {
+    reset()
   }
   display(firstOperand);
 }
