@@ -70,6 +70,10 @@ function operate(expression) {
   }
 }
 
+function round(number) {
+  return String(Math.round(Number(number) * 100) / 100);
+}
+
 function opposite(expression) {
   if (expression.second.stored) {
     expression.second.value = String(expression.second.value * -1)
@@ -84,10 +88,6 @@ function percentage(expression) {
   } else if (expression.first.stored) {
     expression.first.value = String(expression.first.value / 100)
   }
-}
-
-function round(number) {
-  return String(Math.round(Number(number) * 100) / 100);
 }
 
 function display(expression) {
@@ -154,6 +154,11 @@ function bind(event) {
   if (event === "=") {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
+    for (let key in expression) {
+      if (["first", "second"].includes(key)) {
+        expression[key].value = String(expression[key].value);
+      }
+    }
   }
   if (event === "ac") {
     reset(expression);
