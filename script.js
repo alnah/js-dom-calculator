@@ -100,7 +100,7 @@ function display(expression) {
   //TODO: Handle intermediate states
 }
 
-function storeOperands(event) {
+function store(event) {
   if (!expression.first.stored) {
     expression.first.value = event;
     expression.first.stored = true;
@@ -132,7 +132,7 @@ function listenClicks() {
 
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-    storeOperands(event);
+    store(event);
   }
   if (["+/-", "%"].includes(event)) {
     expression.operator = event;
