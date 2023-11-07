@@ -1,21 +1,19 @@
 let expression = {
   first: {value: "0", stored: false},
+  operator: {value: "0", stored: false},
   second: {value: "0", stored: false, start: false},
-  operator: "",
-  result: "0",
+  result: {value: "0", stored: false},
 }
 
 listenClicks()
 listenKeys()
 
 function reset(expression) {
-  expression.first.value = "0";
-  expression.first.stored = false;
-  expression.second.value = "0";
-  expression.second.stored = false;
-  expression.second.start = false;
-  expression.operator = "";
-  expression.result = "0";
+  for (let key in expression) {
+    expression[key].value = "0";
+    expression[key].stored = false;
+  }
+  expression.second.start = false
 }
 
 function add(expression) {
@@ -63,10 +61,12 @@ function opposite(expression) {
 }
 
 function operate(expression) {
-  for (let operand in expression) {
-    expression[operand].value = Number(expression[operand].value);
+  for (let key in expression) {
+    if (["first", "second"].includes(key)) {
+      expression[key].value = Number(expression[key].value);
+    }
   }
-  switch (expression.operator) {
+  switch (expression.operator.value) {
     case "+":
       return add(expression);
     case "-":
@@ -78,11 +78,9 @@ function operate(expression) {
     case "^":
       return power(expression);
     case "%":
-      expression.result = percentage(expression);
-      break;
+      return percentage(expression);
     case "+/-":
-      opposite(expression);
-      break;
+      return opposite(expression);
   }
 }
 
@@ -136,11 +134,18 @@ function bind(event) {
     expression.operator.stored = true;
   }
   if (["+", "-", "/", "*", "^"].includes(event)) {
-    expression.operator = event;
-    expression.second.start = true;
+    if (!expression.result.stored) {
+      expression.operator.value = event;
+      expression.operator.stored = true;
+      expression.second.start = true;
+    } else if (expression.result.stored) {
+      expression.first.value = String(operate(expression));
+      expression.result.stored = false;
+    }
   }
   if (event === "=") {
-    expression.result = String(operate(expression));
+    expression.result.value = String(operate(expression));
+    expression.result.stored = true;
   }
   if (event === "ac") {
     reset(expression);
