@@ -68,20 +68,15 @@ function operate(expression) {
   }
   switch (expression.operator) {
     case "+":
-      expression.result = add(expression);
-      break;
+      return add(expression);
     case "-":
-      expression.result = subtract(expression);
-      break;
+      return subtract(expression);
     case "*":
-      expression.result = multiply(expression);
-      break;
+      return multiply(expression);
     case "/":
-      expression.result = divide(expression);
-      break;
+      return divide(expression);
     case "^":
-      expression.result = power(expression);
-      break;
+      return power(expression);
     case "%":
       expression.result = percentage(expression);
       break;
@@ -143,6 +138,9 @@ function bind(event) {
   if (["+", "-", "/", "*", "^"].includes(event)) {
     expression.operator = event;
     expression.second.start = true;
+  }
+  if (event === "=") {
+    expression.result = String(operate(expression));
   }
   if (event === "ac") {
     reset(expression);
