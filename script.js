@@ -1,10 +1,6 @@
-let firstOperand = {
-  value: "0",
-  stored: false,
-}
-let secondOperand = {
-  value: "0",
-  stored: false,
+let operands = {
+  first: {value: "0", stored: false},
+  second: {value: "0", stored: false},
 }
 let operator = "";
 let result = "";
@@ -13,61 +9,75 @@ listenClicks()
 listenKeys()
 
 function reset() {
-  for (const operand of [firstOperand, secondOperand]) {
-    operand.value = "0";
-    operand.stored = false;
+  for (let operand in operands) {
+    operands[operand].value = "0";
+    operands[operand].stored = false;
   }
   operator = "";
   result = "0";
 }
 
-function add(firstOperand, secondOperand = 0) {
-  return firstOperand + secondOperand;
+function add(operands) {
+  return (!operands.second.stored)
+    ? operands.first.value
+    : operands.first.value + operands.second.value;
 }
 
-function subtract(firstOperand, secondOperand = 0) {
-  return firstOperand - secondOperand;
+function subtract(operands) {
+  return (!operands.second.stored)
+    ? operands.first.value
+    : operands.first.value - operands.second.value;
 }
 
-function multiply(firstOperand, secondOperand = 1) {
-  return firstOperand * secondOperand;
+function multiply(operands) {
+  return (!operands.second.stored)
+    ? operands.first.value
+    : operands.first.value * operands.second.value;
 }
 
-function divide(firstOperand, secondOperand = 1) {
-  return secondOperand === 0 ? "Error" : firstOperand / secondOperand;
+function divide(operands) {
+  return operands.second.value === 0
+    ? "Error"
+    : operands.first.value / operands.second.value;
 }
 
-function power(firstOperand, secondOperand = 0) {
-  return firstOperand ** secondOperand;
+function power(operands) {
+  return (!operands.second.stored)
+    ? operands.first.value
+    : operands.first.value ** operands.second.value;
 }
 
-function percentage(firstOperand) {
-  return firstOperand / 100;
+function percentage(operands) {
+  return (!operands.second.stored)
+    ? operands.first.value / 100
+    : operands.second.value / 100;
 }
 
-function opposite(firstOperand) {
-  return -firstOperand;
+function opposite(operands) {
+  return (!operands.second.stored)
+    ? -operands.first.value
+    : -operands.second.value;
 }
 
-function operate(firstOperand, operator, secondOperand = "") {
-  // secondOperand is optional for .getPercentage and .getOpposite
-  firstOperand = Number(firstOperand);
-  secondOperand = Number(secondOperand);
+function operate(operands, operator) {
+  for (let operand in operands) {
+    operands[operand].value = Number(operands[operand].value);
+  }
   switch (operator) {
     case "+":
-      return add(firstOperand, secondOperand);
+      return add(operands);
     case "-":
-      return subtract(firstOperand, secondOperand);
+      return subtract(operands);
     case "*":
-      return multiply(firstOperand, secondOperand);
+      return multiply(operands);
     case "/":
-      return divide(firstOperand, secondOperand);
+      return divide(operands);
     case "^":
-      return power(firstOperand, secondOperand);
+      return power(operands);
     case "%":
-      return percentage(firstOperand);
+      return percentage(operands);
     case "+/-":
-      return opposite(firstOperand);
+      return opposite(operands);
   }
 }
 
@@ -77,25 +87,19 @@ function display(number) {
 }
 
 function storeOperands(event) {
-  if (!firstOperand.stored) {
-    if (firstOperand.value === "0") {
-      firstOperand.value = event;
-    } else {
-      firstOperand.value += event;
-    }
-  }
-  if (firstOperand.stored && !secondOperand.stored) {
-    if (secondOperand.value === "0") {
-      secondOperand.value = event;
-    } else {
-      secondOperand.value += event;
-    }
+  if (!operands.first.stored) {
+    operands.first.value = event;
+    operands.first.stored = true;
+  } else if (operands.first.stored) {
+    operands.first.value += event;
+  } else if (!operands.second.stored) {
+    //TODO: continue, but before implement operators
   }
 }
 
 function listenKeys() {
-  window.addEventListener("keydown", e => {
-    const keydown = document.querySelector(`.btn[data-key="${e.key}"]`);
+  window.addEventListener("keydown", event => {
+    const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
     if (keydown) {
       const key = keydown.id;
       bind(key);
@@ -106,8 +110,8 @@ function listenKeys() {
 function listenClicks() {
   const buttons = document.querySelectorAll(".btn");
   for (let button of buttons) {
-    button.addEventListener("click", e => {
-      const click = e.target.id;
+    button.addEventListener("click", event => {
+      const click = event.target.id;
       bind(click);
     });
   }
@@ -115,13 +119,13 @@ function listenClicks() {
 
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-    storeOperands(event)
+    storeOperands(event, "first")
   }
   if (["+/-", "%"].includes(event)) {
-    firstOperand.value = operate(firstOperand.value, event);
+    operands.first.value = operate(operands, event);
   }
   if (event === "ac") {
     reset()
   }
-  display(firstOperand.value);
+  display(operands.first.value);
 }
