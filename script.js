@@ -1,6 +1,6 @@
 let expression = {
   first: {value: "0", stored: false},
-  second: {value: "0", stored: false},
+  second: {value: "0", stored: false, start: false},
   operator: "",
   result: "0",
 }
@@ -9,10 +9,11 @@ listenClicks()
 listenKeys()
 
 function reset(expression) {
-  for (let operand in expression) {
-    expression[operand].value = "0";
-    expression[operand].stored = false;
-  }
+  expression.first.value = "0";
+  expression.first.stored = false;
+  expression.second.value = "0";
+  expression.second.stored = false;
+  expression.second.start = false;
   expression.operator = "";
   expression.result = "0";
 }
@@ -54,9 +55,11 @@ function percentage(expression) {
 }
 
 function opposite(expression) {
-  return (!expression.second.stored)
-    ? -expression.first.value
-    : -expression.second.value;
+  if (expression.second.stored) {
+    expression.second.value = expression.second.value * -1;
+  } else if (expression.first.stored) {
+    expression.first.value = expression.first.value * -1;
+  }
 }
 
 function operate(expression) {
@@ -83,7 +86,7 @@ function operate(expression) {
       expression.result = percentage(expression);
       break;
     case "+/-":
-      expression.result = opposite(expression);
+      opposite(expression);
       break;
   }
 }
@@ -94,28 +97,28 @@ function round(number) {
 
 function display(expression) {
   const display = document.querySelector("#display");
-  if (expression.result) {
-    display.textContent = round(expression.result);
-  }
-  //TODO: Handle intermediate states
+  //TODO: set the logic
 }
 
-function store(event) {
+function store(number) {
   if (!expression.first.stored) {
-    expression.first.value = event;
+    expression.first.value = number;
     expression.first.stored = true;
-  } else if (expression.first.stored) {
-    expression.first.value += event;
+  } else if (expression.first.stored && !expression.second.start) {
+    expression.first.value += number;
+  } else if (expression.second.start && !expression.second.stored) {
+    expression.second.value = number;
+    expression.second.stored = true;
+  } else {
+    expression.second.value += number;
   }
-  //TODO: to be continued
 }
 
 function listenKeys() {
   window.addEventListener("keydown", event => {
     const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
     if (keydown) {
-      const key = keydown.id;
-      bind(key);
+      bind(keydown.id);
     }
   });
 }
@@ -124,8 +127,7 @@ function listenClicks() {
   const buttons = document.querySelectorAll(".btn");
   for (let button of buttons) {
     button.addEventListener("click", event => {
-      const click = event.target.id;
-      bind(click);
+      bind(event.target.id);
     });
   }
 }
@@ -135,12 +137,15 @@ function bind(event) {
     store(event);
   }
   if (["+/-", "%"].includes(event)) {
+    expression.operator.value = event;
+    expression.operator.stored = true;
+  }
+  if (["+", "-", "/", "*", "^"].includes(event)) {
     expression.operator = event;
-    operate(expression);
+    expression.second.start = true;
   }
   if (event === "ac") {
     reset(expression);
   }
   console.table(expression);
-  display(expression);
 }
