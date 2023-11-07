@@ -109,6 +109,19 @@ function store(number) {
   }
 }
 
+function chain(expression, operator) {
+  if (!expression.second.stored) {
+    expression.operator.value = operator;
+    expression.operator.stored = true;
+    expression.second.start = true;
+  } else {
+    expression.first.value = String(operate(expression));
+    expression.operator.value = operator;
+    expression.second.value = "0";
+    expression.second.stored = false;
+  }
+}
+
 function listenKeys() {
   window.addEventListener("keydown", event => {
     const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
@@ -138,27 +151,11 @@ function bind(event) {
     percentage(expression);
   }
   if (["+", "-", "/", "*", "^"].includes(event)) {
-    if (!expression.result.stored) {
-      expression.operator.value = event;
-      expression.operator.stored = true;
-      expression.second.start = true;
-    }
-    if (expression.operator.stored && expression.second.stored) {
-      expression.first.value = String(operate(expression));
-      expression.second.value = "0";
-      expression.second.start = false;
-      expression.second.stored = false;
-      expression.result.stored = false;
-    }
+    chain(expression, event);
   }
   if (event === "=") {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
-    for (let key in expression) {
-      if (["first", "second"].includes(key)) {
-        expression[key].value = String(expression[key].value);
-      }
-    }
   }
   if (event === "ac") {
     reset(expression);
