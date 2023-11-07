@@ -1,100 +1,113 @@
-let operands = {
+let expression = {
   first: {value: "0", stored: false},
   second: {value: "0", stored: false},
+  operator: "",
+  result: "0",
 }
-let operator = "";
-let result = "";
 
 listenClicks()
 listenKeys()
 
-function reset() {
-  for (let operand in operands) {
-    operands[operand].value = "0";
-    operands[operand].stored = false;
+function reset(expression) {
+  for (let operand in expression) {
+    expression[operand].value = "0";
+    expression[operand].stored = false;
   }
-  operator = "";
-  result = "0";
+  expression.operator = "";
+  expression.result = "0";
 }
 
-function add(operands) {
-  return (!operands.second.stored)
-    ? operands.first.value
-    : operands.first.value + operands.second.value;
+function add(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value
+    : expression.first.value + expression.second.value;
 }
 
-function subtract(operands) {
-  return (!operands.second.stored)
-    ? operands.first.value
-    : operands.first.value - operands.second.value;
+function subtract(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value
+    : expression.first.value - expression.second.value;
 }
 
-function multiply(operands) {
-  return (!operands.second.stored)
-    ? operands.first.value
-    : operands.first.value * operands.second.value;
+function multiply(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value
+    : expression.first.value * expression.second.value;
 }
 
-function divide(operands) {
-  return operands.second.value === 0
+function divide(expression) {
+  return expression.second.value === 0
     ? "Error"
-    : operands.first.value / operands.second.value;
+    : expression.first.value / expression.second.value;
 }
 
-function power(operands) {
-  return (!operands.second.stored)
-    ? operands.first.value
-    : operands.first.value ** operands.second.value;
+function power(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value
+    : expression.first.value ** expression.second.value;
 }
 
-function percentage(operands) {
-  return (!operands.second.stored)
-    ? operands.first.value / 100
-    : operands.second.value / 100;
+function percentage(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value / 100
+    : expression.second.value / 100;
 }
 
-function opposite(operands) {
-  return (!operands.second.stored)
-    ? -operands.first.value
-    : -operands.second.value;
+function opposite(expression) {
+  return (!expression.second.stored)
+    ? -expression.first.value
+    : -expression.second.value;
 }
 
-function operate(operands, operator) {
-  for (let operand in operands) {
-    operands[operand].value = Number(operands[operand].value);
+function operate(expression) {
+  for (let operand in expression) {
+    expression[operand].value = Number(expression[operand].value);
   }
-  switch (operator) {
+  switch (expression.operator) {
     case "+":
-      return add(operands);
+      expression.result = add(expression);
+      break;
     case "-":
-      return subtract(operands);
+      expression.result = subtract(expression);
+      break;
     case "*":
-      return multiply(operands);
+      expression.result = multiply(expression);
+      break;
     case "/":
-      return divide(operands);
+      expression.result = divide(expression);
+      break;
     case "^":
-      return power(operands);
+      expression.result = power(expression);
+      break;
     case "%":
-      return percentage(operands);
+      expression.result = percentage(expression);
+      break;
     case "+/-":
-      return opposite(operands);
+      expression.result = opposite(expression);
+      break;
   }
 }
 
-function display(number) {
+function round(number) {
+  return String(Math.round(Number(number) * 100) / 100);
+}
+
+function display(expression) {
   const display = document.querySelector("#display");
-  display.textContent = String(Math.round(number * 100) / 100);
+  if (expression.result) {
+    display.textContent = round(expression.result);
+  }
+  //TODO: Handle intermediate states
 }
 
 function storeOperands(event) {
-  if (!operands.first.stored) {
-    operands.first.value = event;
-    operands.first.stored = true;
-  } else if (operands.first.stored) {
-    operands.first.value += event;
-  } else if (!operands.second.stored) {
-    //TODO: continue, but before implement operators
+  if (!expression.first.stored) {
+    expression.first.value = event;
+    expression.first.stored = true;
+  } else if (expression.first.stored) {
+    expression.first.value += event;
   }
+  //TODO: to be continued
 }
 
 function listenKeys() {
@@ -119,13 +132,15 @@ function listenClicks() {
 
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-    storeOperands(event, "first")
+    storeOperands(event);
   }
   if (["+/-", "%"].includes(event)) {
-    operands.first.value = operate(operands, event);
+    expression.operator = event;
+    operate(expression);
   }
   if (event === "ac") {
-    reset()
+    reset(expression);
   }
-  display(operands.first.value);
+  console.table(expression);
+  display(expression);
 }
