@@ -54,14 +54,18 @@ function operate(firstOperand, operator, secondOperand = "") {
       return percentage(firstOperand);
     case "+/-":
       return opposite(firstOperand);
-    default:
-      return `Unknown operator: "${operator}"`
   }
 }
 
 function display(number) {
   const display = document.querySelector("#display");
   display.textContent = number;
+}
+
+function reset() {
+  firstOperand = "0";
+  operator = "";
+  secondOperand = "0";
 }
 
 function storeFirstOperand(number) {
@@ -95,6 +99,15 @@ function listenClicks() {
 function bind(target) {
   if (target in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
     storeFirstOperand(target);
-    display(firstOperand);
   }
+  if (target === "ac") {
+    reset()
+  }
+  if (target === "+/-") {
+    firstOperand = operate(firstOperand, target)
+  }
+  if (target === "%") {
+    firstOperand = operate(firstOperand, target);
+  }
+  display(firstOperand);
 }
