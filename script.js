@@ -69,11 +69,11 @@ function display(number) {
   display.textContent = String(Math.round(number * 100) / 100);
 }
 
-function storeFirstOperand(number) {
+function storeFirstOperand(event) {
   if (firstOperand === "0") {
-    firstOperand = number;
+    firstOperand = event;
   } else {
-    firstOperand += number;
+    firstOperand += event;
   }
 }
 
