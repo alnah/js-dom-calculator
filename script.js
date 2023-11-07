@@ -59,7 +59,7 @@ function operate(firstOperand, operator, secondOperand = "") {
 
 function display(number) {
   const display = document.querySelector("#display");
-  display.textContent = number;
+  display.textContent = String(Math.round(number * 100) / 100);
 }
 
 function reset() {
