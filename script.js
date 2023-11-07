@@ -1,15 +1,23 @@
-let firstOperand = "0";
+let firstOperand = {
+  value: "0",
+  stored: false,
+}
+let secondOperand = {
+  value: "0",
+  stored: false,
+}
 let operator = "";
-let secondOperand = "0";
 let result = "";
 
 listenClicks()
 listenKeys()
 
 function reset() {
-  firstOperand = "0";
+  for (const operand of [firstOperand, secondOperand]) {
+    operand.value = "0";
+    operand.stored = false;
+  }
   operator = "";
-  secondOperand = "0";
   result = "0";
 }
 
@@ -41,7 +49,6 @@ function opposite(firstOperand) {
   return -firstOperand;
 }
 
-
 function operate(firstOperand, operator, secondOperand = "") {
   // secondOperand is optional for .getPercentage and .getOpposite
   firstOperand = Number(firstOperand);
@@ -69,11 +76,20 @@ function display(number) {
   display.textContent = String(Math.round(number * 100) / 100);
 }
 
-function storeFirstOperand(event) {
-  if (firstOperand === "0") {
-    firstOperand = event;
-  } else {
-    firstOperand += event;
+function storeOperands(event) {
+  if (!firstOperand.stored) {
+    if (firstOperand.value === "0") {
+      firstOperand.value = event;
+    } else {
+      firstOperand.value += event;
+    }
+  }
+  if (firstOperand.stored && !secondOperand.stored) {
+    if (secondOperand.value === "0") {
+      secondOperand.value = event;
+    } else {
+      secondOperand.value += event;
+    }
   }
 }
 
@@ -99,13 +115,13 @@ function listenClicks() {
 
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-    storeFirstOperand(event);
+    storeOperands(event)
   }
   if (["+/-", "%"].includes(event)) {
-    firstOperand = operate(firstOperand, event);
+    firstOperand.value = operate(firstOperand.value, event);
   }
   if (event === "ac") {
     reset()
   }
-  display(firstOperand);
+  display(firstOperand.value);
 }
