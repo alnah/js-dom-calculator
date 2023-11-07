@@ -64,8 +64,8 @@ function display(number) {
   display.textContent = number;
 }
 
-function storeFirstOperand(operand, number) {
-  if (operand === "0") {
+function storeFirstOperand(number) {
+  if (firstOperand === "0") {
     firstOperand = number;
   } else {
     firstOperand += number;
