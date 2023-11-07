@@ -1,36 +1,36 @@
-let firstOperand = "";
+let firstOperand = "0";
 let operator = "";
-let secondOperand = "";
+let secondOperand = "0";
 let result = "";
 
 listenClicks()
 listenKeys()
 
-function addNumbers(firstOperand, secondOperand = 0) {
+function add(firstOperand, secondOperand = 0) {
   return firstOperand + secondOperand;
 }
 
-function subtractNumbers(firstOperand, secondOperand = 0) {
+function subtract(firstOperand, secondOperand = 0) {
   return firstOperand - secondOperand;
 }
 
-function multiplyNumbers(firstOperand, secondOperand = 1) {
+function multiply(firstOperand, secondOperand = 1) {
   return firstOperand * secondOperand;
 }
 
-function divideNumbers(firstOperand, secondOperand = 1) {
+function divide(firstOperand, secondOperand = 1) {
   return secondOperand === 0 ? "Error" : firstOperand / secondOperand;
 }
 
-function powerNumber(firstOperand, secondOperand = 0) {
+function power(firstOperand, secondOperand = 0) {
   return firstOperand ** secondOperand;
 }
 
-function getPercentage(firstOperand) {
+function percentage(firstOperand) {
   return firstOperand / 100;
 }
 
-function getOpposite(firstOperand) {
+function opposite(firstOperand) {
   return -firstOperand;
 }
 
@@ -41,31 +41,45 @@ function operate(firstOperand, operator, secondOperand = "") {
   secondOperand = Number(secondOperand);
   switch (operator) {
     case "+":
-      return addNumbers(firstOperand, secondOperand);
+      return add(firstOperand, secondOperand);
     case "-":
-      return subtractNumbers(firstOperand, secondOperand);
+      return subtract(firstOperand, secondOperand);
     case "*":
-      return multiplyNumbers(firstOperand, secondOperand);
+      return multiply(firstOperand, secondOperand);
     case "/":
-      return divideNumbers(firstOperand, secondOperand);
+      return divide(firstOperand, secondOperand);
     case "^":
-      return powerNumber(firstOperand);
+      return power(firstOperand);
     case "%":
-      return getPercentage(firstOperand);
+      return percentage(firstOperand);
     case "+/-":
-      return getOpposite(firstOperand);
+      return opposite(firstOperand);
     default:
       return `Unknown operator: "${operator}"`
   }
 }
 
+function display(number) {
+  const display = document.querySelector("#display");
+  display.textContent = number;
+}
+
+function storeFirstOperand(operand, number) {
+  if (operand === "0") {
+    firstOperand = number;
+  } else {
+    firstOperand += number;
+  }
+}
+
 function listenKeys() {
   window.addEventListener("keydown", e => {
-    const key = document.querySelector(`.btn[data-key="${e.key}"]`);
-    if (key) {
-      console.log(key.id);
-      // TODO: add a function to display
-      // TODO: add a function to store value
+    const keydown = document.querySelector(`.btn[data-key="${e.key}"]`);
+    if (keydown) {
+      const key = keydown.id;
+      if (key in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+        bind(key);
+      }
     }
   });
 }
@@ -75,9 +89,14 @@ function listenClicks() {
   for (let button of buttons) {
     button.addEventListener("click", e => {
       const click = e.target.id;
-      console.log(click);
-      // TODO: add a function to display
-      // TODO: add a function to store value
+      bind(click);
     });
+  }
+}
+
+function bind(target) {
+  if (target in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]) {
+    storeFirstOperand(target);
+    display(firstOperand);
   }
 }
