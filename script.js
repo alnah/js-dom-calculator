@@ -49,7 +49,7 @@ function operate(firstOperand, operator, secondOperand = "") {
     case "/":
       return divide(firstOperand, secondOperand);
     case "^":
-      return power(firstOperand);
+      return power(firstOperand, secondOperand);
     case "%":
       return percentage(firstOperand);
     case "+/-":
