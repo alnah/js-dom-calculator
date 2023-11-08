@@ -1,4 +1,3 @@
-//TODO: change style buttons when clicked
 let expression = {
   first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
@@ -54,16 +53,20 @@ function bind(event) {
 }
 
 function store(number) {
-  if (!expression.first.stored) {
-    expression.first.value = number;
-    expression.first.stored = true;
-  } else if (expression.first.stored && !expression.second.start) {
-    expression.first.value += number;
-  } else if (expression.second.start && !expression.second.stored) {
-    expression.second.value = number;
-    expression.second.stored = true;
+  if (!expression.second.start) {
+    if (!expression.first.stored) {
+      expression.first.value = number;
+      expression.first.stored = true;
+    } else {
+      expression.first.value += number;
+    }
   } else {
-    expression.second.value += number;
+    if (!expression.second.stored) {
+      expression.second.value = number;
+      expression.second.stored = true;
+    } else {
+      expression.second.value += number;
+    }
   }
 }
 
