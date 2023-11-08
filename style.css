@@ -34,6 +34,10 @@ button {
   cursor: pointer;
 }
 
+button:focus {
+  outline: none;
+}
+
 img {
   display: block;
   max-width: 100%;
@@ -42,7 +46,7 @@ img {
 .calculator {
   font-size: 3rem;
   border: 5px solid seagreen;
-  border-radius : 1rem;
+  border-radius: 1rem;
   padding: 1.5rem;
 }
 
@@ -56,6 +60,7 @@ img {
   text-align: right;
   text-transform: uppercase;
 }
+
 .btn {
   border-radius: 1rem;
   min-width: 3rem;
