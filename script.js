@@ -15,6 +15,7 @@ function reset(expression) {
     expression[key].stored = false;
   }
   expression.second.start = false;
+  //TODO: implement "ac" and also "c"
 }
 
 
@@ -167,18 +168,19 @@ function bind(event) {
   if (["+", "-", "/", "*", "^"].includes(event)) {
     chain(expression, event);
   }
-  if (event === "=") {
-    calculate(expression);
-  }
-  if (event === "+/-") {
-    opposite(expression);
-  }
-  if (event === "%") {
-    percentage(expression);
-  }
-  if (event === "ac") {
-    reset(expression);
-    //TODO: implement "ac" and also "c"
+  switch(event) {
+    case "=":
+      calculate(expression);
+      break;
+    case "+/-":
+      opposite(expression);
+      break;
+    case "%":
+      percentage(expression);
+      break;
+    case "ac":
+      reset(expression);
+      break;
   }
   console.table(expression);
 }
