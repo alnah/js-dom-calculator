@@ -204,12 +204,12 @@ function power(expression) {
 
 function round(number) {
   const threshold = 1e6; // Scientific notation >= 1 million
-  const maxDecimalPlaces = 6; // Limit to 6 digits after the decimal
+  const decimals = 6; // Limit to 6 digits after the decimal
   if (Math.abs(number) >= threshold) {
     return number.toExponential(3);
   } else {
     if (number % 1 !== 0) {
-      return Number(number.toFixed(maxDecimalPlaces));
+      return Number(number.toFixed(decimals));
     } else {
       return number;
     }
