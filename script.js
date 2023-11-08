@@ -70,7 +70,7 @@ function store(number) {
   }
 }
 
-function decimal(number) {
+function decimal(expression) {
   if (!expression.first.decimal) {
     if (!expression.first.stored) {
       expression.first.value = "0.";
