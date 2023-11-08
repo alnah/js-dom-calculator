@@ -8,17 +8,6 @@ let expression = {
 listenClicks()
 listenKeys()
 
-
-function reset(expression) {
-  for (let key in expression) {
-    expression[key].value = "0";
-    expression[key].stored = false;
-  }
-  expression.second.start = false;
-  //TODO: implement "ac" and also "c"
-}
-
-
 function add(expression) {
   return (!expression.second.stored)
     ? expression.first.value + expression.first.value
@@ -67,8 +56,15 @@ function operate(expression) {
   }
 }
 
-function round(number) {
-  return String(Math.round(Number(number) * 100) / 100);
+function reset(keys, start = false) {
+  for (let key in keys) {
+    keys[key].value = "0";
+    keys[key].stored = false;
+  }
+  if (start) {
+    expression.second.start = false;
+  }
+  //TODO: implement "ac" and also "c"
 }
 
 function convert(expression, builtin) {
@@ -92,20 +88,12 @@ function opposite(expression) {
 function percentage(expression) {
   if (expression.result.stored) {
     expression.first.value = String(expression.result.value / 100);
-    expression.second.value = "0";
-    expression.second.stored = false;
-    expression.result.value = "0";
-    expression.result.stored = false;
+    reset([expression.second, expression.result]);
   } else if (expression.second.stored) {
     expression.second.value = String(expression.second.value / 100);
   } else if (expression.first.stored) {
     expression.first.value = String(expression.first.value / 100);
   }
-}
-
-function display(expression) {
-  const display = document.querySelector("#display");
-  //TODO: set the logic
 }
 
 function store(number) {
@@ -130,10 +118,7 @@ function chain(expression, operator) {
   } else {
     expression.first.value = String(operate(expression));
     expression.operator.value = operator;
-    for (let key of [expression.second, expression.result]) {
-      key.value = "0";
-      key.stored = false;
-    }
+    reset([expression.second, expression.result]);
   }
 }
 
@@ -181,8 +166,18 @@ function bind(event) {
       percentage(expression);
       break;
     case "ac":
-      reset(expression);
+      reset(expression,true);
       break;
   }
   console.table(expression);
+}
+
+function round(number) {
+  return String(Math.round(Number(number) * 100) / 100);
+}
+
+
+function display(expression) {
+  const display = document.querySelector("#display");
+  //TODO: set the logic
 }
