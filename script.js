@@ -1,7 +1,9 @@
+//TODO: implement decimals
+//TODO: change style buttons when clicked
 let expression = {
-  first: {value: "0", stored: false},
+  first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
-  second: {value: "0", stored: false, start: false},
+  second: {value: "0", stored: false, decimal: false, start: false},
   result: {value: "0", stored: false},
 }
 
@@ -35,6 +37,9 @@ function bind(event) {
     case "=":
       calculate(expression);
       break;
+    case ".":
+      decimal(expression);
+      break;
     case "+/-":
       opposite(expression);
       break;
@@ -42,10 +47,10 @@ function bind(event) {
       percentage(expression);
       break;
     case "ac":
-      reset(expression, true);
+      reset(expression);
       break;
   }
-  display(expression, "blop");
+  display(expression, "bip");
   console.table(expression);
 }
 
@@ -63,6 +68,29 @@ function store(number) {
   }
 }
 
+function decimal(number) {
+  if (!expression.first.decimal) {
+    if (!expression.first.stored) {
+      expression.first.value = "0.";
+      expression.first.stored = true;
+    } else {
+      expression.first.value += ".";
+    }
+    expression.first.decimal = true;
+  }
+  if (expression.second.start) {
+    if (!expression.second.decimal) {
+      if (!expression.second.stored) {
+        expression.second.value = "0.";
+        expression.second.stored = true;
+      } else {
+        expression.second.value += ".";
+      }
+      expression.second.decimal = true;
+    }
+  }
+}
+
 function chain(expression, operator) {
   if (!expression.second.stored) {
     expression.operator.value = operator;
@@ -76,7 +104,7 @@ function chain(expression, operator) {
 }
 
 function calculate(expression) {
-  if (expression.second.stored || expression.first.stored) {
+  if (expression.second.stored && expression.first.stored) {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
   }
@@ -104,13 +132,16 @@ function percentage(expression) {
   }
 }
 
-function reset(keys, start = false) {
+function reset(keys) {
   for (let key in keys) {
     keys[key].value = "0";
     keys[key].stored = false;
-  }
-  if (start) {
-    expression.second.start = false;
+    if (["first", "second"].includes(key)) {
+      keys[key].decimal = false;
+    }
+    if (key === "second") {
+      keys[key].start = false;
+    }
   }
 }
 
