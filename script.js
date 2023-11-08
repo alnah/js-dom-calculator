@@ -1,3 +1,7 @@
+//TODO: implement decimals
+//TODO: implement display
+//TODO: implement "ac" and also "c"
+//TODO: change style buttons when clicked
 let expression = {
   first: {value: "0", stored: false},
   operator: {value: "0", stored: false},
@@ -20,9 +24,7 @@ function listenKeys() {
 function listenClicks() {
   const buttons = document.querySelectorAll(".btn");
   for (let button of buttons) {
-    button.addEventListener("click", event => {
-      bind(event.target.id);
-    });
+    button.addEventListener("click", event => bind(event.target.id));
   }
 }
 
@@ -113,7 +115,6 @@ function reset(keys, start = false) {
   if (start) {
     expression.second.start = false;
   }
-  //TODO: implement "ac" and also "c"
 }
 
 function operate(expression) {
