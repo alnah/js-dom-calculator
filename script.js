@@ -8,128 +8,6 @@ let expression = {
 listenClicks()
 listenKeys()
 
-function add(expression) {
-  return (!expression.second.stored)
-    ? expression.first.value + expression.first.value
-    : expression.first.value + expression.second.value;
-}
-
-function subtract(expression) {
-  return (!expression.second.stored)
-    ? expression.first.value - expression.first.value
-    : expression.first.value - expression.second.value;
-}
-
-function multiply(expression) {
-  return (!expression.second.stored)
-    ? expression.first.value * expression.first.value
-    : expression.first.value * expression.second.value;
-}
-
-function divide(expression) {
-  return expression.second.value
-    ? expression.second.value === 0
-      ? "Error"
-      : expression.first.value / expression.second.value
-    : expression.first.value / expression.first.value;
-}
-
-function power(expression) {
-  return (!expression.second.stored)
-    ? expression.first.value ** expression.first.value
-    : expression.first.value ** expression.second.value;
-}
-
-function operate(expression) {
-  convert(expression, Number);
-  switch (expression.operator.value) {
-    case "+":
-      return add(expression);
-    case "-":
-      return subtract(expression);
-    case "*":
-      return multiply(expression);
-    case "/":
-      return divide(expression);
-    case "^":
-      return power(expression);
-  }
-}
-
-function reset(keys, start = false) {
-  for (let key in keys) {
-    keys[key].value = "0";
-    keys[key].stored = false;
-  }
-  if (start) {
-    expression.second.start = false;
-  }
-  //TODO: implement "ac" and also "c"
-}
-
-function convert(expression, builtin) {
-  for (let key in expression) {
-    if (["first", "second"].includes(key)) {
-      expression[key].value = builtin(expression[key].value);
-    }
-  }
-}
-
-function opposite(expression) {
-  if (expression.result.stored) {
-    expression.result.value = String(expression.result.value * -1);
-  } else if (expression.second.stored) {
-    expression.second.value = String(expression.second.value * -1);
-  } else if (expression.first.stored) {
-    expression.first.value = String(expression.first.value * -1);
-  }
-}
-
-function percentage(expression) {
-  if (expression.result.stored) {
-    expression.first.value = String(expression.result.value / 100);
-    reset([expression.second, expression.result]);
-  } else if (expression.second.stored) {
-    expression.second.value = String(expression.second.value / 100);
-  } else if (expression.first.stored) {
-    expression.first.value = String(expression.first.value / 100);
-  }
-}
-
-function store(number) {
-  if (!expression.first.stored) {
-    expression.first.value = number;
-    expression.first.stored = true;
-  } else if (expression.first.stored && !expression.second.start) {
-    expression.first.value += number;
-  } else if (expression.second.start && !expression.second.stored) {
-    expression.second.value = number;
-    expression.second.stored = true;
-  } else {
-    expression.second.value += number;
-  }
-}
-
-function chain(expression, operator) {
-  if (!expression.second.stored) {
-    expression.operator.value = operator;
-    expression.operator.stored = true;
-    expression.second.start = true;
-  } else {
-    expression.first.value = String(operate(expression));
-    expression.operator.value = operator;
-    reset([expression.second, expression.result]);
-  }
-}
-
-function calculate(expression) {
-  if (expression.first.stored && expression.second.stored) {
-    expression.result.value = String(operate(expression));
-    expression.result.stored = true;
-  }
-  convert(expression, String);
-}
-
 function listenKeys() {
   window.addEventListener("keydown", event => {
     const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
@@ -172,12 +50,133 @@ function bind(event) {
   console.table(expression);
 }
 
+function store(number) {
+  if (!expression.first.stored) {
+    expression.first.value = number;
+    expression.first.stored = true;
+  } else if (expression.first.stored && !expression.second.start) {
+    expression.first.value += number;
+  } else if (expression.second.start && !expression.second.stored) {
+    expression.second.value = number;
+    expression.second.stored = true;
+  } else {
+    expression.second.value += number;
+  }
+}
+
+function chain(expression, operator) {
+  if (!expression.second.stored) {
+    expression.operator.value = operator;
+    expression.operator.stored = true;
+    expression.second.start = true;
+  } else {
+    expression.first.value = String(operate(expression));
+    expression.operator.value = operator;
+    reset([expression.second, expression.result]);
+  }
+}
+
+function calculate(expression) {
+  if (expression.first.stored && expression.second.stored) {
+    expression.result.value = String(operate(expression));
+    expression.result.stored = true;
+  }
+  convert(expression, String);
+}
+
+function opposite(expression) {
+  if (expression.result.stored) {
+    expression.result.value = String(expression.result.value * -1);
+  } else if (expression.second.stored) {
+    expression.second.value = String(expression.second.value * -1);
+  } else if (expression.first.stored) {
+    expression.first.value = String(expression.first.value * -1);
+  }
+}
+
+function percentage(expression) {
+  if (expression.result.stored) {
+    expression.first.value = String(expression.result.value / 100);
+    reset([expression.second, expression.result]);
+  } else if (expression.second.stored) {
+    expression.second.value = String(expression.second.value / 100);
+  } else if (expression.first.stored) {
+    expression.first.value = String(expression.first.value / 100);
+  }
+}
+
+function reset(keys, start = false) {
+  for (let key in keys) {
+    keys[key].value = "0";
+    keys[key].stored = false;
+  }
+  if (start) {
+    expression.second.start = false;
+  }
+  //TODO: implement "ac" and also "c"
+}
+
+function operate(expression) {
+  convert(expression, Number);
+  switch (expression.operator.value) {
+    case "+":
+      return add(expression);
+    case "-":
+      return subtract(expression);
+    case "*":
+      return multiply(expression);
+    case "/":
+      return divide(expression);
+    case "^":
+      return power(expression);
+  }
+}
+
+function add(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value + expression.first.value
+    : expression.first.value + expression.second.value;
+}
+
+function subtract(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value - expression.first.value
+    : expression.first.value - expression.second.value;
+}
+
+function multiply(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value * expression.first.value
+    : expression.first.value * expression.second.value;
+}
+
+function divide(expression) {
+  return expression.second.value
+    ? expression.second.value === 0
+      ? "Error"
+      : expression.first.value / expression.second.value
+    : expression.first.value / expression.first.value;
+}
+
+function power(expression) {
+  return (!expression.second.stored)
+    ? expression.first.value ** expression.first.value
+    : expression.first.value ** expression.second.value;
+}
+
 function round(number) {
   return String(Math.round(Number(number) * 100) / 100);
 }
 
-
 function display(expression) {
   const display = document.querySelector("#display");
   //TODO: set the logic
+}
+
+function convert(expression, builtin) {
+  for (let key in expression) {
+    if (["first", "second"].includes(key)) {
+      expression[key].value = builtin(expression[key].value);
+    }
+  }
 }
