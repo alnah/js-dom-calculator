@@ -132,6 +132,8 @@ function chain(expression, operator) {
     expression.operator.value = operator;
     expression.second.value = "0";
     expression.second.stored = false;
+    expression.result.value = "0";
+    expression.result.stored = false;
   }
 }
 
