@@ -1,6 +1,5 @@
 // hover
 // find a way to avoid expression as a global
-// handle the case of "minus" as first event listened
 let expression = {
   first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
