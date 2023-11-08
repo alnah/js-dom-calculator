@@ -14,7 +14,7 @@ function reset(expression) {
     expression[key].value = "0";
     expression[key].stored = false;
   }
-  expression.second.start = false
+  expression.second.start = false;
 }
 
 
@@ -167,6 +167,7 @@ function bind(event) {
   }
   if (event === "ac") {
     reset(expression);
+    //TODO: implement "ac" and also "c"
   }
   console.table(expression);
 }
