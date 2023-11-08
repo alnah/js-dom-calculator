@@ -203,20 +203,30 @@ function power(expression) {
 }
 
 function round(number) {
-  return String(Math.round(Number(number) * 100) / 100);
+  const threshold = 1e6; // Scientific notation >= 1 million
+  const maxDecimalPlaces = 6; // Limit to 6 digits after the decimal
+  if (Math.abs(number) >= threshold) {
+    return number.toExponential(3);
+  } else {
+    if (number % 1 !== 0) {
+      return Number(number.toFixed(maxDecimalPlaces));
+    } else {
+      return number;
+    }
+  }
 }
 
 function display(expression, message) {
-  const display = document.querySelector("#display");
+  const displayElement = document.querySelector("#display");
+  let valueToDisplay = message;
   if (expression.result.stored) {
-    display.textContent = round(expression.result.value);
+    valueToDisplay = round(Number(expression.result.value));
   } else if (expression.second.stored) {
-    display.textContent = round(expression.second.value);
+    valueToDisplay = round(Number(expression.second.value));
   } else if (expression.first.stored) {
-    display.textContent = round(expression.first.value);
-  } else {
-    display.textContent = message;
+    valueToDisplay = round(Number(expression.first.value));
   }
+  displayElement.textContent = valueToDisplay;
 }
 
 function convert(expression, builtin) {
