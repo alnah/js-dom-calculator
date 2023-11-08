@@ -1,8 +1,8 @@
 // 2.2222222222222223E+150 case in display with css or js?
 // hover
-// prevent default hovering when press enter while button already cliked
+// prevent default hovering when press enter while button already clicked
 // find a way to avoid expression as a global
-// rewrite calculate to store better the result and less work on display
+// handle the case of "minus" as first event listened
 let expression = {
   first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
@@ -91,6 +91,9 @@ function calculate(expression) {
   if (expression.second.stored && expression.first.stored) {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
+  } else if (expression.first.stored) {
+    expression.result.value = expression.first.value;
+    expression.result.stored = true;
   }
   convert(expression, String);
 }
@@ -117,7 +120,6 @@ function decimal(expression) {
     }
   }
 }
-
 
 function opposite(expression) {
   if (expression.result.stored) {
