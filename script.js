@@ -33,7 +33,7 @@ function bind(event) {
   if (["+", "-", "/", "*", "^"].includes(event)) {
     chain(expression, event);
   }
-  switch(event) {
+  switch (event) {
     case "=":
       calculate(expression);
       break;
@@ -44,7 +44,7 @@ function bind(event) {
       percentage(expression);
       break;
     case "ac":
-      reset(expression,true);
+      reset(expression, true);
       break;
   }
   console.table(expression);
@@ -151,10 +151,10 @@ function multiply(expression) {
 }
 
 function divide(expression) {
-  return expression.second.value
-    ? expression.second.value === 0
+  return expression.second.stored
+    ? (expression.second.value === 0
       ? "Error"
-      : expression.first.value / expression.second.value
+      : expression.first.value / expression.second.value)
     : expression.first.value / expression.first.value;
 }
 
