@@ -134,19 +134,19 @@ function operate(expression) {
 }
 
 function add(expression) {
-  return (!expression.second.stored)
+  return !expression.second.stored
     ? expression.first.value + expression.first.value
     : expression.first.value + expression.second.value;
 }
 
 function subtract(expression) {
-  return (!expression.second.stored)
+  return !expression.second.stored
     ? expression.first.value - expression.first.value
     : expression.first.value - expression.second.value;
 }
 
 function multiply(expression) {
-  return (!expression.second.stored)
+  return !expression.second.stored
     ? expression.first.value * expression.first.value
     : expression.first.value * expression.second.value;
 }
@@ -160,7 +160,7 @@ function divide(expression) {
 }
 
 function power(expression) {
-  return (!expression.second.stored)
+  return !expression.second.stored
     ? expression.first.value ** expression.first.value
     : expression.first.value ** expression.second.value;
 }
