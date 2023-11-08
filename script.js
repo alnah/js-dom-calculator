@@ -51,11 +51,7 @@ function power(expression) {
 }
 
 function operate(expression) {
-  for (let key in expression) {
-    if (["first", "second"].includes(key)) {
-      expression[key].value = Number(expression[key].value);
-    }
-  }
+  convert(expression, Number);
   switch (expression.operator.value) {
     case "+":
       return add(expression);
@@ -72,6 +68,14 @@ function operate(expression) {
 
 function round(number) {
   return String(Math.round(Number(number) * 100) / 100);
+}
+
+function convert(expression, builtin) {
+  for (let key in expression) {
+    if (["first", "second"].includes(key)) {
+      expression[key].value = builtin(expression[key].value);
+    }
+  }
 }
 
 function opposite(expression) {
@@ -135,11 +139,7 @@ function calculate(expression) {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
   }
-  for (let key in expression) {
-    if (["first", "second"].includes(key)) {
-      expression[key].value = String(expression[key].value);
-    }
-  }
+  convert(expression, String);
 }
 
 function listenKeys() {
