@@ -130,6 +130,18 @@ function chain(expression, operator) {
   }
 }
 
+function calculate(expression) {
+  if (expression.first.stored && expression.second.stored) {
+    expression.result.value = String(operate(expression));
+    expression.result.stored = true;
+  }
+  for (let key in expression) {
+    if (["first", "second"].includes(key)) {
+      expression[key].value = String(expression[key].value);
+    }
+  }
+}
+
 function listenKeys() {
   window.addEventListener("keydown", event => {
     const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
@@ -152,18 +164,17 @@ function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
     store(event);
   }
+  if (["+", "-", "/", "*", "^"].includes(event)) {
+    chain(expression, event);
+  }
+  if (event === "=") {
+    calculate(expression);
+  }
   if (event === "+/-") {
     opposite(expression);
   }
   if (event === "%") {
     percentage(expression);
-  }
-  if (["+", "-", "/", "*", "^"].includes(event)) {
-    chain(expression, event);
-  }
-  if (event === "=") {
-    expression.result.value = String(operate(expression));
-    expression.result.stored = true;
   }
   if (event === "ac") {
     reset(expression);
