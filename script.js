@@ -1,5 +1,4 @@
 //TODO: implement decimals
-//TODO: implement display
 //TODO: implement "ac" and also "c"
 //TODO: change style buttons when clicked
 let expression = {
@@ -49,6 +48,7 @@ function bind(event) {
       reset(expression, true);
       break;
   }
+  display(expression, "blop");
   console.table(expression);
 }
 
@@ -169,9 +169,17 @@ function round(number) {
   return String(Math.round(Number(number) * 100) / 100);
 }
 
-function display(expression) {
+function display(expression, message) {
   const display = document.querySelector("#display");
-  //TODO: set the logic
+  if (expression.result.stored) {
+    display.textContent = expression.result.value;
+  } else if (expression.second.stored) {
+    display.textContent = expression.second.value;
+  } else if (expression.first.stored) {
+    display.textContent = expression.first.value;
+  } else {
+    display.textContent = message;
+  }
 }
 
 function convert(expression, builtin) {
