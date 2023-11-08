@@ -152,9 +152,9 @@ function multiply(expression) {
 
 function divide(expression) {
   return expression.second.stored
-    ? (expression.second.value === 0
+    ? expression.second.value === 0
       ? "Error"
-      : expression.first.value / expression.second.value)
+      : expression.first.value / expression.second.value
     : expression.first.value / expression.first.value;
 }
 
