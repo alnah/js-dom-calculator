@@ -1,4 +1,3 @@
-//TODO: implement decimals
 //TODO: change style buttons when clicked
 let expression = {
   first: {value: "0", stored: false, decimal: false},
