@@ -1,4 +1,3 @@
-// 2.2222222222222223E+150 case in display with css or js?
 // hover
 // find a way to avoid expression as a global
 // handle the case of "minus" as first event listened
