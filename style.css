@@ -58,6 +58,7 @@ img {
   border: 5px solid lightgray;
   border-radius: 1rem;
   box-shadow: 2px 2px 2px black;
+  text-shadow: 3px 3px 3px black;
   padding: 1rem;
   align-items: center;
   text-align: right;
