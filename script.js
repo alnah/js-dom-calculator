@@ -77,8 +77,7 @@ function round(number) {
 function opposite(expression) {
   if (expression.result.stored) {
     expression.result.value = String(expression.result.value * -1);
-  }
-  else if (expression.second.stored) {
+  } else if (expression.second.stored) {
     expression.second.value = String(expression.second.value * -1);
   } else if (expression.first.stored) {
     expression.first.value = String(expression.first.value * -1);
@@ -86,10 +85,16 @@ function opposite(expression) {
 }
 
 function percentage(expression) {
-  if (expression.second.stored) {
-    expression.second.value = String(expression.second.value / 100)
+  if (expression.result.stored) {
+    expression.first.value = String(expression.result.value / 100);
+    expression.second.value = "0";
+    expression.second.stored = false;
+    expression.result.value = "0";
+    expression.result.stored = false;
+  } else if (expression.second.stored) {
+    expression.second.value = String(expression.second.value / 100);
   } else if (expression.first.stored) {
-    expression.first.value = String(expression.first.value / 100)
+    expression.first.value = String(expression.first.value / 100);
   }
 }
 
