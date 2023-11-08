@@ -1,3 +1,8 @@
+// 2.2222222222222223E+150 case in display with css or js?
+// hover
+// prevent default hovering when press enter while button already cliked
+// find a way to avoid expression as a global
+// rewrite calculate to store better the result and less work on display
 let expression = {
   first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
@@ -26,7 +31,7 @@ function listenClicks() {
 
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-    store(event);
+    store(expression, event);
   }
   if (["+", "-", "/", "*", "^"].includes(event)) {
     chain(expression, event);
@@ -52,7 +57,7 @@ function bind(event) {
   console.table(expression);
 }
 
-function store(number) {
+function store(expression, number) {
   if (!expression.second.start) {
     if (!expression.first.stored) {
       expression.first.value = number;
@@ -68,6 +73,26 @@ function store(number) {
       expression.second.value += number;
     }
   }
+}
+
+function chain(expression, operator) {
+  if (!expression.second.stored) {
+    expression.operator.value = operator;
+    expression.operator.stored = true;
+    expression.second.start = true;
+  } else {
+    expression.first.value = String(operate(expression));
+    expression.operator.value = operator;
+    reset([expression.second, expression.result]);
+  }
+}
+
+function calculate(expression) {
+  if (expression.second.stored && expression.first.stored) {
+    expression.result.value = String(operate(expression));
+    expression.result.stored = true;
+  }
+  convert(expression, String);
 }
 
 function decimal(expression) {
@@ -93,25 +118,6 @@ function decimal(expression) {
   }
 }
 
-function chain(expression, operator) {
-  if (!expression.second.stored) {
-    expression.operator.value = operator;
-    expression.operator.stored = true;
-    expression.second.start = true;
-  } else {
-    expression.first.value = String(operate(expression));
-    expression.operator.value = operator;
-    reset([expression.second, expression.result]);
-  }
-}
-
-function calculate(expression) {
-  if (expression.second.stored && expression.first.stored) {
-    expression.result.value = String(operate(expression));
-    expression.result.stored = true;
-  }
-  convert(expression, String);
-}
 
 function opposite(expression) {
   if (expression.result.stored) {
