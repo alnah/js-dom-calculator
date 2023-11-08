@@ -130,10 +130,10 @@ function chain(expression, operator) {
   } else {
     expression.first.value = String(operate(expression));
     expression.operator.value = operator;
-    expression.second.value = "0";
-    expression.second.stored = false;
-    expression.result.value = "0";
-    expression.result.stored = false;
+    for (let key of [expression.second, expression.result]) {
+      key.value = "0";
+      key.stored = false;
+    }
   }
 }
 
