@@ -1,6 +1,3 @@
-//TODO: implement decimals
-//TODO: implement "ac" and also "c"
-//TODO: change style buttons when clicked
 let expression = {
   first: {value: "0", stored: false},
   operator: {value: "0", stored: false},
@@ -172,11 +169,11 @@ function round(number) {
 function display(expression, message) {
   const display = document.querySelector("#display");
   if (expression.result.stored) {
-    display.textContent = expression.result.value;
+    display.textContent = round(expression.result.value);
   } else if (expression.second.stored) {
-    display.textContent = expression.second.value;
+    display.textContent = round(expression.second.value);
   } else if (expression.first.stored) {
-    display.textContent = expression.first.value;
+    display.textContent = round(expression.first.value);
   } else {
     display.textContent = message;
   }
