@@ -79,7 +79,7 @@ function chain(expression, operator) {
 }
 
 function calculate(expression) {
-  if (expression.first.stored && expression.second.stored) {
+  if (expression.second.stored || expression.first.stored) {
     expression.result.value = String(operate(expression));
     expression.result.stored = true;
   }
