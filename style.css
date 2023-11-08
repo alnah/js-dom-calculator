@@ -22,7 +22,7 @@ html {
 }
 
 body {
-  background: black;
+  background: #121A20;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -43,10 +43,12 @@ img {
   max-width: 100%;
 }
 
+/*My Style*/
 .calculator {
   font-size: 3rem;
   border: 5px solid seagreen;
   border-radius: 1rem;
+  box-shadow: 1px 1px 1px black;
   padding: 1.5rem;
 }
 
@@ -55,6 +57,7 @@ img {
   font-family: "Apple Symbols", serif;
   border: 5px solid lightgray;
   border-radius: 1rem;
+  box-shadow: 2px 2px 2px black;
   padding: 1rem;
   align-items: center;
   text-align: right;
@@ -64,16 +67,59 @@ img {
 .btn {
   border-radius: 1rem;
   min-width: 3rem;
+  color: white;
+  box-shadow: 2px 2px 2px black;
+}
+
+/* Base styles for all buttons */
+.btn:hover,
+.btn:focus {
+  transition: background-color 0.3s ease; /* This will ensure the color transitions over a 1 second period */
+}
+
+/* Specific styles for .number class */
+.number {
+  background: lightgrey;
+  color: black;
+}
+
+.number:hover,
+.number:focus {
+  background: black;
+  color: lightgrey;
 }
 
 .option {
   background: lightcoral;
+  color: black;
 }
 
+.option:hover,
+.option:focus {
+  background: black;
+  color: lightcoral;
+}
+
+/* Specific styles for .operator class */
 .operator {
   background: lightblue;
+  color: black;
 }
 
+.operator:hover,
+.operator:focus {
+  background: black;
+  color: lightblue;
+}
+
+/* Specific styles for #\= id */
 #\= {
   background: orange;
+  color: black;
+}
+
+#\=:hover,
+#\=:focus {
+  background: black;
+  color: orange;
 }

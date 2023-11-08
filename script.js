@@ -1,4 +1,3 @@
-// hover
 // find a way to avoid expression as a global
 let expression = {
   first: {value: "0", stored: false, decimal: false},
