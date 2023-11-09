@@ -50,7 +50,7 @@ function bind(event) {
       reset(expression);
       break;
   }
-  display(expression, "bip");
+  display(expression, "0");
   console.table(expression);
 }
 

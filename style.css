@@ -21,15 +21,6 @@ html {
   }
 }
 
-body {
-  background: #121A20;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
 button {
   cursor: pointer;
 }
@@ -38,34 +29,21 @@ button:focus {
   outline: none;
 }
 
-/*My Style*/
-
-.calculator {
-  font-size: 3rem;
-  border: 5px solid seagreen;
-  border-radius: 1rem;
-  box-shadow: 1px 1px 1px black;
-  padding: 1.5rem;
+body {
+  background: #121A20;
 }
 
 #display {
   color: white;
   font-family: "Apple Symbols", serif;
-  border: 5px solid lightgray;
-  border-radius: 1rem;
-  box-shadow: 2px 2px 2px black;
   text-shadow: 3px 3px 3px black;
-  padding: 1rem;
-  align-items: center;
-  text-align: right;
   text-transform: uppercase;
 }
 
 .btn {
-  border-radius: 1rem;
-  min-width: 3rem;
   color: white;
-  box-shadow: 2px 2px 2px black;
+  border-radius: 4rem;
+  box-shadow: 3px 3px 3px black;
 }
 
 .btn:hover,
@@ -117,9 +95,84 @@ button:focus {
   color: orange;
 }
 
+@media (orientation: portrait) and (max-width: 500px) {
+  body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 5vh;
+  }
 
-/*Small portrait mobile*/
+  .calculator {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+  }
 
-@media (max-width: 320px) and (orientation: portrait) {
+  #display {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+    min-width: 75vw;
+    min-height: 20vh;
+    margin-bottom: 5vh;
+    margin-right: 15vw;
+  }
 
+  .rows {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    max-width: 75vw;
+  }
+
+  .btn {
+    margin: 1vw;
+  }
+
+  @media (max-width: 500px) {
+
+    #display {
+      font-size: 6.5rem;
+    }
+
+    .btn {
+      min-width: 6rem;
+      min-height: 5.5rem;
+      font-size: 3em;
+    }
+  }
+
+  @media (max-width: 400px) {
+
+    #display {
+      font-size: 5rem;
+    }
+
+    .btn {
+      min-width: 5rem;
+      min-height: 4rem;
+      font-size: 2.5em;
+    }
+  }
+
+  @media (max-width: 300px) {
+
+    #display {
+      font-size: 4rem;
+    }
+
+    .btn {
+      min-width: 4rem;
+      min-height: 3rem;
+      font-size: 2rem;
+    }
+  }
 }
