@@ -38,12 +38,8 @@ button:focus {
   outline: none;
 }
 
-img {
-  display: block;
-  max-width: 100%;
-}
-
 /*My Style*/
+
 .calculator {
   font-size: 3rem;
   border: 5px solid seagreen;
@@ -72,13 +68,11 @@ img {
   box-shadow: 2px 2px 2px black;
 }
 
-/* Base styles for all buttons */
 .btn:hover,
 .btn:focus {
-  transition: background-color 0.3s ease; /* This will ensure the color transitions over a 1 second period */
+  transition: background-color 0.3s ease;
 }
 
-/* Specific styles for .number class */
 .number {
   background: lightgrey;
   color: black;
@@ -101,7 +95,6 @@ img {
   color: lightcoral;
 }
 
-/* Specific styles for .operator class */
 .operator {
   background: lightblue;
   color: black;
@@ -113,7 +106,6 @@ img {
   color: lightblue;
 }
 
-/* Specific styles for #\= id */
 #\= {
   background: orange;
   color: black;
@@ -123,4 +115,11 @@ img {
 #\=:focus {
   background: black;
   color: orange;
+}
+
+
+/*Small portrait mobile*/
+
+@media (max-width: 320px) and (orientation: portrait) {
+
 }
