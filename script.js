@@ -1,4 +1,5 @@
 // find a way to avoid expression as a global
+// media queries for different resolutions and orientations
 let expression = {
   first: {value: "0", stored: false, decimal: false},
   operator: {value: "0", stored: false},
