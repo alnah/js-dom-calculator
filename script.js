@@ -1,4 +1,5 @@
 calculator();
+
 function calculator() {
   let expression = {
     first: {value: "0", stored: false, decimal: false},
@@ -57,7 +58,7 @@ function calculator() {
         break;
     }
     display(expression, "0");
-    // console.table(expression);
+    console.table(expression);
   }
 
   function store(expression, number) {
@@ -104,8 +105,7 @@ function calculator() {
       expression.result.value = String(operate(expression));
       expression.result.stored = true;
     } else if (expression.first.stored) {
-      expression.result.value = expression.first.value;
-      expression.result.stored = true;
+      expression.first.value = String(operate(expression));
     }
     convert(expression, String);
   }
