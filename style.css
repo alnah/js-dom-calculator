@@ -21,6 +21,7 @@ html {
 
 button {
   cursor: pointer;
+  text-align: center;
 }
 
 button:focus {
