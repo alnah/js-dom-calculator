@@ -11,7 +11,7 @@ function calculator() {
   const equalsBtn = document.querySelector("#equals");
   // Nodelist of elements
   const numberBtns = document.querySelectorAll(".number");
-  const operatorBtns = document.querySelectorAll(".operator")
+  const operatorBtns = document.querySelectorAll(".operator");
 
   let expression = {
     first: "",
