@@ -14,6 +14,7 @@ function listenKeys() {
     const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
     if (keydown) {
       bind(keydown.id);
+      keydown.focus();
     }
   });
 }
@@ -21,7 +22,12 @@ function listenKeys() {
 function listenClicks() {
   const buttons = document.querySelectorAll(".btn");
   for (let button of buttons) {
-    button.addEventListener("click", event => bind(event.target.id));
+    button.addEventListener("click", event => {
+      const click = event.target;
+      bind(click.id);
+      click.focus();
+    });
+
   }
 }
 
@@ -51,7 +57,7 @@ function bind(event) {
       break;
   }
   display(expression, "0");
-  console.table(expression);
+  // console.table(expression);
 }
 
 function store(expression, number) {
