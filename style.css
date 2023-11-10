@@ -103,7 +103,6 @@ body {
     flex-direction: column;
     justify-content: flex-end;
     align-items: center;
-    margin-bottom: 10vh;
   }
 
   #display {
