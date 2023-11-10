@@ -33,8 +33,7 @@ body {
 }
 
 /*Colorization*/
-#operation,
-#result {
+#display {
   color: white;
   text-shadow: 3px 3px 3px black;
   text-transform: uppercase;
@@ -112,20 +111,13 @@ body {
   }
 }
 
-.display {
+#display {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-end;
   align-items: flex-end;
   margin-right: 1vw;
-}
-
-#result {
   font-size: clamp(2rem, 1rem + 6vh, 14rem);
-}
-
-#operation {
-  font-size: clamp(1rem, .5rem + 3vh, 7rem);
 }
 
 .btn {
