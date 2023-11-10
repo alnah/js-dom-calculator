@@ -18,7 +18,7 @@ function calculator() {
     second: "",
     operator: "",
     reset: false,
-  }
+  };
 
   function add(a, b) {
     return a + b;
