@@ -97,11 +97,12 @@ body {
 /*Responsiveness*/
 
 body {
-  min-height: 100vh;
+  max-height: 80vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
+  margin-top: 10vh;
   margin-bottom: 10vh;
 }
 
