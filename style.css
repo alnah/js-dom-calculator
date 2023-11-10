@@ -83,6 +83,16 @@ body {
   color: lightblue;
 }
 
+#ac {
+  background: lightcoral;
+  color: black;
+}
+
+#ac:hover {
+  background: black;
+  color: lightcoral;
+}
+
 #\= {
   background: orange;
   color: black;

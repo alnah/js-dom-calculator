@@ -28,6 +28,7 @@ function listenClicks() {
 function bind(event) {
   if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
     store(expression, event);
+    modifyClearBtn(expression);
   }
   if (["+", "-", "/", "*", "^"].includes(event)) {
     chain(expression, event);
@@ -46,7 +47,7 @@ function bind(event) {
       percentage(expression);
       break;
     case "ac":
-      reset(expression);
+      clear(expression);
       break;
   }
   display(expression, "0");
@@ -68,6 +69,15 @@ function store(expression, number) {
     } else {
       expression.second.value += number;
     }
+  }
+}
+
+function modifyClearBtn(expression) {
+  const btn = document.querySelector("#ac");
+  if (expression.second.stored || expression.first.stored) {
+    btn.textContent = "C";
+  } else {
+    btn.textContent = "AC";
   }
 }
 
@@ -135,6 +145,19 @@ function percentage(expression) {
     expression.second.value = String(expression.second.value / 100);
   } else if (expression.first.stored) {
     expression.first.value = String(expression.first.value / 100);
+  }
+}
+
+function clear(expression) {
+  const clearBtn = document.querySelector("#ac");
+  if (expression.result.stored) {
+    reset(expression);
+    clearBtn.textContent = "AC";
+  } else if (expression.second.stored) {
+    reset([expression.second]);
+  } else if (expression.first.stored) {
+    reset(expression);
+    clearBtn.textContent = "AC";
   }
 }
 
