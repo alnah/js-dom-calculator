@@ -105,7 +105,6 @@ body {
 }
 
 /*Responsiveness*/
-
 body {
   min-width: 100vw;
   min-height: 100vh;
@@ -114,6 +113,12 @@ body {
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 5vh;
+}
+
+@media (min-width: 1024px) {
+  body {
+    justify-content: center;
+  }
 }
 
 #display {
