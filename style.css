@@ -97,7 +97,7 @@ body {
 /*Responsiveness*/
 
 body {
-  max-height: 80vh;
+  max-height: 70vh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
