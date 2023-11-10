@@ -47,7 +47,6 @@ body {
   box-shadow: 3px 3px 3px black;
 }
 
-.btn:hover,
 .btn:focus {
   transition: background-color 0.3s ease;
 }
@@ -57,7 +56,6 @@ body {
   color: black;
 }
 
-.number:hover,
 .number:focus {
   background: black;
   color: lightgrey;
@@ -68,7 +66,6 @@ body {
   color: black;
 }
 
-.option:hover,
 .option:focus {
   background: black;
   color: lightcoral;
@@ -79,7 +76,6 @@ body {
   color: black;
 }
 
-.operator:hover,
 .operator:focus {
   background: black;
   color: lightblue;
@@ -88,11 +84,6 @@ body {
 #ac {
   background: lightcoral;
   color: black;
-}
-
-#ac:hover {
-  background: black;
-  color: lightcoral;
 }
 
 #\= {
@@ -137,4 +128,30 @@ body {
   width: clamp(1rem, 1rem + 5vh, 16rem);
   height: clamp(0.75rem, 1rem + 5vh, 16rem);
   font-size: clamp(0.5em, 0.25rem + 2.5vh, 8em);
+}
+
+@media (hover: hover) {
+  .btn:hover {
+    transition: background-color 0.3s ease;
+  }
+
+  .number:hover {
+    background: black;
+    color: lightgrey;
+  }
+
+  .option:hover {
+    background: black;
+    color: lightcoral;
+  }
+
+  .operator:hover {
+    background: black;
+    color: lightblue;
+  }
+
+  #ac:hover {
+    background: black;
+    color: lightcoral;
+  }
 }
