@@ -119,15 +119,15 @@ body {
   justify-content: flex-end;
   align-items: flex-end;
   margin-right: 1vw;
-  font-size: clamp(1rem, 1rem + 4.5vh, 14rem);
+  font-size: clamp(2rem, 1rem + 6vh, 14rem);
 }
 
 .btn {
   padding: clamp(0.25rem, 0.25rem + 0.2vw, 10rem);
   margin: clamp(0.25rem, 0.25rem + 0.2vw, 10rem);
-  width: clamp(1rem, 1rem + 5vh, 16rem);
-  height: clamp(0.75rem, 1rem + 5vh, 16rem);
-  font-size: clamp(0.5em, 0.25rem + 2.5vh, 8em);
+  width: clamp(2rem, 1rem + 7.5vh, 16rem);
+  height: clamp(1.25rem, 1rem + 7.5vh, 16rem);
+  font-size: clamp(1em, 0.25rem + 3.75vh, 8em);
 }
 
 @media (hover: hover) {
