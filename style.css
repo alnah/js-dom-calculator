@@ -91,7 +91,6 @@ body {
   color: black;
 }
 
-#\=:hover,
 #\=:focus {
   background: black;
   color: orange;
@@ -124,6 +123,7 @@ body {
 }
 
 .btn {
+  padding: clamp(0.25rem, 0.25rem + 0.2vw, 10rem);
   margin: clamp(0.25rem, 0.25rem + 0.2vw, 10rem);
   width: clamp(1rem, 1rem + 5vh, 16rem);
   height: clamp(0.75rem, 1rem + 5vh, 16rem);
@@ -153,5 +153,10 @@ body {
   #ac:hover {
     background: black;
     color: lightcoral;
+  }
+
+  #\=:hover {
+    background: black;
+    color: orange;
   }
 }
