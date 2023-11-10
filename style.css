@@ -21,7 +21,6 @@ html {
 
 button {
   cursor: pointer;
-  text-align: center;
 }
 
 button:focus {
@@ -123,12 +122,12 @@ body {
   justify-content: flex-end;
   align-items: flex-end;
   margin-right: 1vw;
-  font-size: clamp(1rem, 1rem + 10vh, 7rem);
+  font-size: clamp(1rem, 1rem + 4.5vh, 7rem);
 }
 
 .btn {
   margin: clamp(0.25rem, 0.25rem + 0.2vw, 5rem);
-  width: clamp(1rem, 1rem + 10vh, 8rem);
-  height: clamp(0.75rem, 1rem + 10vh, 8rem);
-  font-size: clamp(0.25em, 0.25rem + 5vh, 4em);
+  width: clamp(1rem, 1rem + 5vh, 8rem);
+  height: clamp(0.75rem, 1rem + 5vh, 8rem);
+  font-size: clamp(0.25em, 0.25rem + 2.5vh, 4em);
 }
