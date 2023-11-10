@@ -11,6 +11,8 @@
 
 html {
   font-size: 62.5%; /* (62.5/100) * 16px = 10px */
+  text-size-adjust: none; /* for other mobile browsers */
+  -webkit-text-size-adjust: none; /* for iOS Safari */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -127,12 +129,12 @@ body {
   justify-content: flex-end;
   align-items: flex-end;
   margin-right: 1vw;
-  font-size: clamp(1rem, 1rem + 4.5vh, 7rem);
+  font-size: clamp(1rem, 1rem + 4.5vh, 14rem);
 }
 
 .btn {
-  margin: clamp(0.25rem, 0.25rem + 0.2vw, 5rem);
-  width: clamp(1rem, 1rem + 5vh, 8rem);
-  height: clamp(0.75rem, 1rem + 5vh, 8rem);
-  font-size: clamp(0.25em, 0.25rem + 2.5vh, 4em);
+  margin: clamp(0.25rem, 0.25rem + 0.2vw, 10rem);
+  width: clamp(1rem, 1rem + 5vh, 16rem);
+  height: clamp(0.75rem, 1rem + 5vh, 16rem);
+  font-size: clamp(0.5em, 0.25rem + 2.5vh, 8em);
 }
