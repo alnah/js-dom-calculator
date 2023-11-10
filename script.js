@@ -9,6 +9,7 @@ function calculator() {
   const oppositeBtn = document.querySelector("#opposite");
   const percentageBtn = document.querySelector("#percentage");
   const equalsBtn = document.querySelector("#equals");
+  const decimalBtn = document.querySelector("#decimal");
   // Nodelist of elements
   const numberBtns = document.querySelectorAll(".number");
   const operatorBtns = document.querySelectorAll(".operator");
