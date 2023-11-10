@@ -2,6 +2,17 @@ calculator();
 
 function calculator() {
 
+  // Element
+  const displayOperation = document.querySelector("#operation");
+  const displayResult = document.querySelector("#result");
+  const clearBtn = document.querySelector("#clear");
+  const oppositeBtn = document.querySelector("#opposite");
+  const percentageBtn = document.querySelector("#percentage");
+  const equalsBtn = document.querySelector("#equals");
+  // Nodelist of elements
+  const numberBtns = document.querySelectorAll(".number");
+  const operatorBtns = document.querySelectorAll(".operator")
+
   let expression = {
     first: "",
     second: "",
