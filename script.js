@@ -155,8 +155,12 @@ function clear(expression) {
     clearBtn.textContent = "AC";
   } else if (expression.second.stored) {
     reset([expression.second]);
+    expression.second.start = true;
+  } else if (expression.operator.stored) {
+    reset([expression.operator])
+    expression.second.start = false;
   } else if (expression.first.stored) {
-    reset(expression);
+    reset([expression.first]);
     clearBtn.textContent = "AC";
   }
 }
