@@ -247,16 +247,16 @@ function calculator() {
   }
 
   function display(expression, message) {
-    const displayElement = document.querySelector("#display");
-    let valueToDisplay = message;
+    const display = document.querySelector("#display");
+    let value = message;
     if (expression.result.stored) {
-      valueToDisplay = round(Number(expression.result.value));
+      value = round(Number(expression.result.value));
     } else if (expression.second.stored) {
-      valueToDisplay = round(Number(expression.second.value));
+      value = round(Number(expression.second.value));
     } else if (expression.first.stored) {
-      valueToDisplay = round(Number(expression.first.value));
+      value = round(Number(expression.first.value));
     }
-    displayElement.textContent = valueToDisplay;
+    display.textContent = value;
   }
 
   function convert(expression, builtin) {
