@@ -27,7 +27,6 @@ function listenClicks() {
       bind(click.id);
       click.focus();
     });
-
   }
 }
 
