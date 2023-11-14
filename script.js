@@ -1,269 +1,288 @@
-calculator();
+initializeCalculator();
 
-function calculator() {
-  let expression = {
-    first: {value: "0", stored: false, decimal: false},
-    operator: {value: "0", stored: false},
-    second: {value: "0", stored: false, decimal: false, start: false},
-    result: {value: "0", stored: false},
-  }
+function initializeCalculator() {
+  const startWithOperator = /[+\-×^÷]/;
 
-  listenClicks()
-  listenKeys()
+  let first = {value: "", unsaved: true, saved: false, integer: true};
+  let second = {value: "", unsaved: true, saved: false, integer: true};
+  let operator = {value: "", unsaved: true, saved: false};
+  let result = "";
+
+  listenClicks();
+  listenKeys();
 
   function listenKeys() {
     window.addEventListener("keydown", event => {
-      const keydown = document.querySelector(`.btn[data-key="${event.key}"]`);
-      if (keydown) {
-        bind(keydown.id);
-        keydown.focus();
+      const key = document.querySelector(`[data-key="${event.key}"]`);
+      if (key) {
+        bindEvent(key.id);
+        key.focus(); // Safari and Firefox don't handle focus in CSS files
       }
     });
   }
 
   function listenClicks() {
     const buttons = document.querySelectorAll(".btn");
-    for (let button of buttons) {
+    buttons.forEach(button => {
       button.addEventListener("click", event => {
         const click = event.target;
-        bind(click.id);
-        click.focus();
+        bindEvent(click.id);
+        click.focus(); // Safari and Firefox don't handle focus in CSS files
       });
-    }
+    });
   }
 
-  function bind(event) {
+  function bindEvent(event) {
     if (["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"].includes(event)) {
-      store(expression, event);
-      modifyClearBtn(expression);
+      addOperand(event);
     }
-    if (["+", "-", "/", "*", "^"].includes(event)) {
-      chain(expression, event);
+    if (["+", "-", "÷", "×", "^"].includes(event)) {
+      addOperator(event);
     }
     switch (event) {
       case "=":
-        calculate(expression);
+        evaluate();
         break;
       case ".":
-        decimal(expression);
+        addDecimal();
         break;
       case "+/-":
-        opposite(expression);
+        getOpposite();
         break;
       case "%":
-        percentage(expression);
+        getPercentage();
         break;
       case "ac":
-        clear(expression);
+        clearExpression();
         break;
     }
-    display(expression, "0");
-    console.table(expression);
+    updateClearbutton("AC", "C");
+    display(first.value, operator.value, second.value, result);
+    console.table({"a": first, "op": operator, "b": second, "=": result});
   }
 
-  function store(expression, number) {
-    if (!expression.second.start) {
-      if (!expression.first.stored) {
-        expression.first.value = number;
-        expression.first.stored = true;
-      } else {
-        expression.first.value += number;
-      }
-    } else {
-      if (!expression.second.stored) {
-        expression.second.value = number;
-        expression.second.stored = true;
-      } else {
-        expression.second.value += number;
+  function addOperand(operandEvent) {
+    if (first.saved && operator.saved && second.saved) {
+      second.value += operandEvent;
+      if (second.value.slice(0, 1) === "0" && second.value.slice(1, 2) !== ".") {
+        second.value = second.value.substring(1) + operandEvent;
       }
     }
-  }
-
-  function modifyClearBtn(expression) {
-    const btn = document.querySelector("#ac");
-    if (expression.second.stored || expression.first.stored) {
-      btn.textContent = "C";
-    } else {
-      btn.textContent = "AC";
+    if (first.saved && operator.saved && second.unsaved) {
+      second.value = operandEvent;
+      save(second);
     }
-  }
-
-  function chain(expression, operator) {
-    if (!expression.second.stored) {
-      expression.operator.value = operator;
-      expression.operator.stored = true;
-      expression.second.start = true;
-    } else {
-      expression.first.value = String(operate(expression));
-      expression.operator.value = operator;
-      reset([expression.second, expression.result]);
-    }
-  }
-
-  function calculate(expression) {
-    if (expression.second.stored && expression.first.stored) {
-      expression.result.value = String(operate(expression));
-      expression.result.stored = true;
-    } else if (expression.first.stored) {
-      expression.first.value = String(operate(expression));
-    }
-    convert(expression, String);
-  }
-
-  function decimal(expression) {
-    if (!expression.first.decimal) {
-      if (!expression.first.stored) {
-        expression.first.value = "0.";
-        expression.first.stored = true;
-      } else {
-        expression.first.value += ".";
-      }
-      expression.first.decimal = true;
-    }
-    if (expression.second.start) {
-      if (!expression.second.decimal) {
-        if (!expression.second.stored) {
-          expression.second.value = "0.";
-          expression.second.stored = true;
-        } else {
-          expression.second.value += ".";
-        }
-        expression.second.decimal = true;
+    if (first.saved && operator.unsaved && second.unsaved) {
+      first.value += operandEvent;
+      if (first.value.slice(0, 1) === "0" && first.value.slice(1, 2) !== ".") {
+        first.value = second.value.substring(1) + operandEvent;
       }
     }
-  }
-
-  function opposite(expression) {
-    if (expression.result.stored) {
-      expression.result.value = String(expression.result.value * -1);
-    } else if (expression.second.stored) {
-      expression.second.value = String(expression.second.value * -1);
-    } else if (expression.first.stored) {
-      expression.first.value = String(expression.first.value * -1);
+    if (first.unsaved && operator.unsaved && second.unsaved) {
+      first.value = operandEvent;
+      save(first);
     }
   }
 
-  function percentage(expression) {
-    if (expression.result.stored) {
-      expression.first.value = String(expression.result.value / 100);
-      reset([expression.second, expression.result]);
-    } else if (expression.second.stored) {
-      expression.second.value = String(expression.second.value / 100);
-    } else if (expression.first.stored) {
-      expression.first.value = String(expression.first.value / 100);
+  function addOperator(operatorEvent) {
+    if (first.saved && operator.saved && second.saved) {
+      evaluate(operatorEvent);
+    }
+    if (first.saved && operator.saved && second.unsaved) {
+      operator.value = operatorEvent;
+    }
+    if (first.saved && operator.unsaved && second.unsaved) {
+      operator.value = operatorEvent;
+      save(operator);
+    }
+    if (first.unsaved && operator.unsaved && second.unsaved) {
+      first.value = operatorEvent + first.value;
+      save(first);
     }
   }
 
-  function clear(expression) {
-    const clearBtn = document.querySelector("#ac");
-    if (expression.result.stored) {
-      reset(expression);
-      clearBtn.textContent = "AC";
-    } else if (expression.second.stored) {
-      reset([expression.second]);
-      expression.second.start = true;
-    } else if (expression.operator.stored) {
-      reset([expression.operator])
-      expression.second.start = false;
-    } else if (expression.first.stored) {
-      reset([expression.first]);
-      clearBtn.textContent = "AC";
-    }
-  }
-
-  function reset(keys) {
-    for (let key in keys) {
-      keys[key].value = "0";
-      keys[key].stored = false;
-      if (["first", "second"].includes(key)) {
-        keys[key].decimal = false;
-      }
-      if (key === "second") {
-        keys[key].start = false;
+  function evaluate() { // to chain expressions
+    // Handle a whole expression
+    if (first.saved && operator.saved && second.saved) {
+      result = operate(first.value, operator.value, second.value);
+      const lookForTimeObulusOrCaret = /[×^÷]/;
+      if (lookForTimeObulusOrCaret.test(first.value)) {
+        first.value = "0";
+        result = operate(first.value, operator.value, second.value);
       }
     }
+    // One single first operand and an operator
+    if (first.saved && operator.saved && second.unsaved) {
+      second.value = first.value;
+      result = operate(first.value, operator.value, second.value);
+    }
+    // One single first operand
+    if (first.saved && operator.unsaved && second.unsaved) {
+      result = first.value;
+      // Handle a situation with a leading operator in first operand
+      if (startWithOperator.test(first.value)) {
+        second.value = first.value.substring(1);
+        operator.value = first.value.slice(0, 1);
+        first.value = "0";
+        result = operate(first.value, operator.value, second.value);
+      }
+    }
+    // Handle nothing
+    if (first.unsaved && operator.unsaved && second.unsaved) {
+      result = "0";
+    }
+    // Allow chaining with operators
+    first.value = result;
+    [operator, second].forEach(element => reset(element));
   }
 
-  function operate(expression) {
-    convert(expression, Number);
-    switch (expression.operator.value) {
+  function operate(first, sign, second) {
+    const a = Number(first);
+    const b = Number(second);
+    switch (sign) {
       case "+":
-        return add(expression);
+        return String(add(a, b));
       case "-":
-        return subtract(expression);
-      case "*":
-        return multiply(expression);
-      case "/":
-        return divide(expression);
+        return String(subtract(a, b));
+      case "×":
+        return String(multiply(a, b));
       case "^":
-        return power(expression);
+        return String(power(a, b));
+      case "÷":
+        if (b !== 0) {
+          return String(divide(a, b));
+        }
+        return "Error";
     }
   }
 
-  function add(expression) {
-    return !expression.second.stored
-      ? expression.first.value + expression.first.value
-      : expression.first.value + expression.second.value;
+  function add(a, b) {
+    return a + b;
   }
 
-  function subtract(expression) {
-    return !expression.second.stored
-      ? expression.first.value - expression.first.value
-      : expression.first.value - expression.second.value;
+  function subtract(a, b) {
+    return a - b;
   }
 
-  function multiply(expression) {
-    return !expression.second.stored
-      ? expression.first.value * expression.first.value
-      : expression.first.value * expression.second.value;
+  function multiply(a, b) {
+    return a * b;
   }
 
-  function divide(expression) {
-    return expression.second.stored
-      ? expression.second.value === 0
-        ? "Error"
-        : expression.first.value / expression.second.value
-      : expression.first.value / expression.first.value;
+  function divide(a, b) {
+    return a / b;
   }
 
-  function power(expression) {
-    return !expression.second.stored
-      ? expression.first.value ** expression.first.value
-      : expression.first.value ** expression.second.value;
+  function power(a, b) {
+    return a ** b;
   }
 
-  function round(number) {
-    const threshold = 1e6; // Scientific notation >= 1 million
-    const decimals = 6; // Limit to 6 digits after the decimal
-    if (Math.abs(number) >= threshold) {
-      return number.toExponential(3);
-    } else {
-      if (number % 1 !== 0) {
-        return Number(number.toFixed(decimals));
+  function addDecimal() {
+    if (operator.unsaved && first.unsaved && first.integer) {
+      first.value = "0.";
+      save(first, true);
+    }
+    if (operator.unsaved && first.saved && first.integer) {
+      first.value += ".";
+      first.integer = false;
+    }
+    if (operator.saved && second.unsaved && second.integer) {
+      second.value = "0.";
+      save(second, true);
+    }
+    if (operator.saved && second.saved && second.integer) {
+      second.value += ".";
+      second.integer = false;
+    }
+  }
+
+  function getOpposite() {
+    if (first.saved && operator.unsaved && second.unsaved) {
+      first.value *= -1;
+      first.value = String(first.value);
+    }
+    if (first.saved && operator.saved && second.saved) {
+      if (operator.value === "-") {
+        operator.value = "+";
+      } else if (operator.value === "+") {
+        operator.value = "-"
       } else {
-        return number;
+        second.value *= -1;
+        second.value = String(second.value);
       }
     }
   }
 
-  function display(expression, message) {
-    const display = document.querySelector("#display");
-    let value = message;
-    if (expression.result.stored) {
-      value = round(Number(expression.result.value));
-    } else if (expression.second.stored) {
-      value = round(Number(expression.second.value));
-    } else if (expression.first.stored) {
-      value = round(Number(expression.first.value));
+  function getPercentage() {
+    if (first.saved && operator.unsaved) {
+      first.value = first.value / 100;
     }
-    display.textContent = value;
+    if (operator.saved && second.saved) {
+      second.value = second.value / 100;
+    }
   }
 
-  function convert(expression, builtin) {
-    for (let key in expression) {
-      if (["first", "second"].includes(key)) {
-        expression[key].value = builtin(expression[key].value);
+  function clearExpression() {
+    if (first.saved && operator.unsaved && second.unsaved) {
+      reset(first);
+    }
+    if (first.saved && operator.saved && second.unsaved) {
+      reset(operator);
+    }
+    if (first.saved && operator.saved && second.saved) {
+      reset(second);
+    }
+    if (result) {
+      result = "";
+    }
+  }
+
+  function updateClearbutton(initText, updatedText) {
+    const clearButton = document.querySelector("#ac");
+    clearButton.textContent = updatedText;
+    if (first.unsaved && operator.unsaved && second.unsaved) {
+      clearButton.textContent = initText;
+    }
+  }
+
+  function display(first, sign, second, result) {
+    const expressionDisplay = document.querySelector("#expression");
+    const resultDisplay = document.querySelector("#result");
+    // [first, second, result].map(number => round(number));
+    expressionDisplay.textContent = `${first} ${sign} ${second}`;
+    resultDisplay.textContent = "0";
+    if (result) {
+      resultDisplay.textContent = result;
+    }
+    if (result === "Error") {
+      expressionDisplay.textContent = "You cannot divide by 0"
+    }
+  }
+
+  function save(element, decimal = false) {
+    element.unsaved = false;
+    element.saved = true;
+    if (decimal) {
+      element.integer = false;
+    }
+  }
+
+  function reset(element) {
+    for (let key in element) {
+      switch (key) {
+        case "value":
+          element[key] = "";
+          break;
+        case "unsaved":
+          element[key] = true;
+          break;
+        case "saved":
+          element[key] = false;
+          break;
+        case "integer":
+          element[key] = true;
+          break;
       }
     }
   }
+
 }
