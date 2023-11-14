@@ -1,8 +1,5 @@
 initializeCalculator();
-
 function initializeCalculator() {
-  const startWithOperator = /[+\-×^÷]/;
-
   let first = {value: "", unsaved: true, saved: false, integer: true};
   let second = {value: "", unsaved: true, saved: false, integer: true};
   let operator = {value: "", unsaved: true, saved: false};
@@ -64,8 +61,8 @@ function initializeCalculator() {
   function addOperand(operandEvent) {
     if (first.saved && operator.saved && second.saved) {
       second.value += operandEvent;
-      if (second.value.slice(0, 1) === "0" && second.value.slice(1, 2) !== ".") {
-        second.value = second.value.substring(1) + operandEvent;
+      if (second.value.startsWith("0") && second.value.slice(1,2) !== ".") {
+        second.value = second.value.substring(1);
       }
     }
     if (first.saved && operator.saved && second.unsaved) {
@@ -74,8 +71,8 @@ function initializeCalculator() {
     }
     if (first.saved && operator.unsaved && second.unsaved) {
       first.value += operandEvent;
-      if (first.value.slice(0, 1) === "0" && first.value.slice(1, 2) !== ".") {
-        first.value = second.value.substring(1) + operandEvent;
+      if (first.value.startsWith("0") && first.value.slice(1,2) !== ".") {
+        first.value = first.value.substring(1);
       }
     }
     if (first.unsaved && operator.unsaved && second.unsaved) {
@@ -111,15 +108,16 @@ function initializeCalculator() {
         result = operate(first.value, operator.value, second.value);
       }
     }
-    // One single first operand and an operator
+    // Handle a single first operator together with an operand
     if (first.saved && operator.saved && second.unsaved) {
       second.value = first.value;
       result = operate(first.value, operator.value, second.value);
     }
-    // One single first operand
+    // Handle a single first operand
     if (first.saved && operator.unsaved && second.unsaved) {
       result = first.value;
-      // Handle a situation with a leading operator in first operand
+      // Handle a situation where the first operand has a leading operator
+      const startWithOperator = /[+\-×^÷]/;
       if (startWithOperator.test(first.value)) {
         second.value = first.value.substring(1);
         operator.value = first.value.slice(0, 1);
@@ -127,7 +125,7 @@ function initializeCalculator() {
         result = operate(first.value, operator.value, second.value);
       }
     }
-    // Handle nothing
+    // Handle a situation where nothing has been chosen
     if (first.unsaved && operator.unsaved && second.unsaved) {
       result = "0";
     }
