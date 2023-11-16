@@ -125,6 +125,7 @@ body {
 
 #result {
   font-size: clamp(2rem, 1rem + 6vh, 14rem);
+  max-height: clamp(2rem, 1rem + 6vh, 14rem);
 }
 
 #expression {

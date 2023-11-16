@@ -4,6 +4,7 @@ function initializeCalculator() {
   let second = {value: "", unsaved: true, saved: false, integer: true};
   let operator = {value: "", unsaved: true, saved: false};
   let result = "";
+  let allowNewNumber = false;
 
   listenClicks();
   listenKeys();
@@ -38,10 +39,10 @@ function initializeCalculator() {
     }
     switch (event) {
       case "=":
-        evaluate();
+        evaluateExpression(first, operator, second);
         break;
       case ".":
-        addDecimal();
+        addDecimal(event);
         break;
       case "+/-":
         getOpposite();
@@ -54,84 +55,114 @@ function initializeCalculator() {
         break;
     }
     updateClearbutton("AC", "C");
-    display(first.value, operator.value, second.value, result);
-    console.table({"a": first, "op": operator, "b": second, "=": result});
+    updateDisplay(first.value, operator.value, second.value, result);
+    console.table({
+      first: first,
+      operator: operator,
+      second: second,
+      result: result,
+      new: allowNewNumber
+    });
   }
 
   function addOperand(operandEvent) {
+    // Handle the other digits for the second number
     if (first.saved && operator.saved && second.saved) {
       second.value += operandEvent;
-      if (second.value.startsWith("0") && second.value.slice(1,2) !== ".") {
+      // Handle the leading zero for the second number
+      if (second.value.startsWith("0") && second.value.slice(1, 2) !== ".") {
         second.value = second.value.substring(1);
       }
     }
+    // Save the first digit for the second number
     if (first.saved && operator.saved && second.unsaved) {
       second.value = operandEvent;
-      save(second);
+      saveData(second);
     }
+    // Save the other digits for the first number
     if (first.saved && operator.unsaved && second.unsaved) {
       first.value += operandEvent;
-      if (first.value.startsWith("0") && first.value.slice(1,2) !== ".") {
+      // Handle the leading zero for the first number
+      if (first.value.startsWith("0") && first.value.slice(1, 2) !== ".") {
         first.value = first.value.substring(1);
       }
+      // Allow a new operation thanks to a previous result
+      if (allowNewNumber) {
+        first.value = operandEvent;
+        result = "";
+        allowNewNumber = false;
+      }
     }
-    if (first.unsaved && operator.unsaved && second.unsaved) {
+    // Save the first digit for the first number
+    if (first.unsaved) {
       first.value = operandEvent;
-      save(first);
+      saveData(first);
     }
   }
 
   function addOperator(operatorEvent) {
+    // Evaluate expression when chaining operations with a new sign
     if (first.saved && operator.saved && second.saved) {
-      evaluate(operatorEvent);
+      evaluateExpression(first, operator, second);
     }
-    if (first.saved && operator.saved && second.unsaved) {
+    if (operatorEvent === "-" && operator.saved && second.unsaved) {
+      // Allow a leading minus sign for the second number
+      second.value = operatorEvent;
+      saveData(second);
+      // Handle both negative sign and number
+      if (operator.value === "-" && second.value.startsWith("-")) {
+        operator.value = "+";
+        resetData(second);
+      }
+      // Handle a plus sign and followed by a negative second number
+      if (operator.value === "+" && second.value.startsWith("-")) {
+        operator.value = "-";
+        second.value = second.value.substring(1);
+        resetData(second);
+      }
+    }
+    // Save the sign for the expression
+    if (first.saved && operator.unsaved && first.value !== "-") {
       operator.value = operatorEvent;
+      saveData(operator);
     }
-    if (first.saved && operator.unsaved && second.unsaved) {
-      operator.value = operatorEvent;
-      save(operator);
-    }
-    if (first.unsaved && operator.unsaved && second.unsaved) {
-      first.value = operatorEvent + first.value;
-      save(first);
+    // Allow a leading minus sign for the first number
+    if (operatorEvent === "-" && first.unsaved && operator.unsaved) {
+      first.value = operatorEvent;
+      saveData(first);
     }
   }
 
-  function evaluate() { // to chain expressions
-    // Handle a whole expression
+  function evaluateExpression(first, operator, second) {
+    // Handle a complete expression
     if (first.saved && operator.saved && second.saved) {
-      result = operate(first.value, operator.value, second.value);
-      const lookForTimeObulusOrCaret = /[×^÷]/;
-      if (lookForTimeObulusOrCaret.test(first.value)) {
-        first.value = "0";
-        result = operate(first.value, operator.value, second.value);
+      // Handle a single minus sign as a second number, like 25x-
+      if (second.value === "-") {
+        return;
       }
+      result = operate(first.value, operator.value, second.value);
     }
-    // Handle a single first operator together with an operand
+    // Handle a single first number followed by a sign
     if (first.saved && operator.saved && second.unsaved) {
       second.value = first.value;
       result = operate(first.value, operator.value, second.value);
     }
-    // Handle a single first operand
+    // Handle a single first number
     if (first.saved && operator.unsaved && second.unsaved) {
       result = first.value;
-      // Handle a situation where the first operand has a leading operator
-      const startWithOperator = /[+\-×^÷]/;
-      if (startWithOperator.test(first.value)) {
-        second.value = first.value.substring(1);
-        operator.value = first.value.slice(0, 1);
-        first.value = "0";
-        result = operate(first.value, operator.value, second.value);
-      }
     }
-    // Handle a situation where nothing has been chosen
+    // Handle an empty expression
     if (first.unsaved && operator.unsaved && second.unsaved) {
       result = "0";
     }
-    // Allow chaining with operators
-    first.value = result;
-    [operator, second].forEach(element => reset(element));
+    // Allow to chain expression when adding a sign
+    if (result !== "Error") {
+      first.value = result;
+      allowNewNumber = true;
+      [operator, second].forEach(element => resetData(element));
+    } else {
+      [first, operator, second].forEach(element => resetData(element));
+    }
   }
 
   function operate(first, sign, second) {
@@ -147,10 +178,11 @@ function initializeCalculator() {
       case "^":
         return String(power(a, b));
       case "÷":
-        if (b !== 0) {
-          return String(divide(a, b));
+        // Handle a division by zero
+        if (b === 0) {
+          return "Error";
         }
-        return "Error";
+        return String(divide(a, b));
     }
   }
 
@@ -174,60 +206,86 @@ function initializeCalculator() {
     return a ** b;
   }
 
-  function addDecimal() {
+  function addDecimal(pointEvent) {
+    // When user start with "."
     if (operator.unsaved && first.unsaved && first.integer) {
-      first.value = "0.";
-      save(first, true);
+      first.value = "0" + pointEvent;
+      saveData(first, true);
     }
+    // Handle negative number
     if (operator.unsaved && first.saved && first.integer) {
-      first.value += ".";
-      first.integer = false;
+      if (first.value.startsWith("-")) {
+        first.value += "0" + pointEvent;
+        first.integer = false;
+      } else {
+        first.value += pointEvent;
+        first.integer = false;
+      }
     }
     if (operator.saved && second.unsaved && second.integer) {
-      second.value = "0.";
-      save(second, true);
+      second.value = "0" + pointEvent;
+      saveData(second, true);
     }
     if (operator.saved && second.saved && second.integer) {
-      second.value += ".";
-      second.integer = false;
+      if (second.value.startsWith("-")) {
+        second.value += "0" + pointEvent;
+        second.integer = false;
+      } else {
+        second.value += pointEvent;
+        second.integer = false;
+      }
     }
   }
 
   function getOpposite() {
-    if (first.saved && operator.unsaved && second.unsaved) {
+    // When a number consist only in a minus saved we want nothing to happen
+    if (first.value === "-" || second.value === "-") {
+      return;
+    }
+    // Allow to put decimal without any numbers after the point when called
+    let target = second.saved ? second : first
+    if (target.integer === false) {
+      target.integer = true;
+    }
+    // Alternate +/- for the first number
+    if (first.saved && operator.unsaved) {
       first.value *= -1;
       first.value = String(first.value);
     }
-    if (first.saved && operator.saved && second.saved) {
-      if (operator.value === "-") {
+    // Alternate +/- for the second number
+    if (operator.saved && second.saved) {
+      second.value *= -1;
+      second.value = String(second.value);
+      // Handle a sign plus followed by a negative number
+      if (operator.value === ("+") && second.value.startsWith("-")) {
+        operator.value = "-";
+        second.value = second.value.substring(1);
+      }
+      // Handle both negative sign and number
+      if (operator.value === "-" && second.value.startsWith("-")) {
         operator.value = "+";
-      } else if (operator.value === "+") {
-        operator.value = "-"
-      } else {
-        second.value *= -1;
-        second.value = String(second.value);
+        second.value = second.value.substring(1);
       }
     }
   }
 
   function getPercentage() {
-    if (first.saved && operator.unsaved) {
-      first.value = first.value / 100;
-    }
-    if (operator.saved && second.saved) {
-      second.value = second.value / 100;
+    let target = operator.unsaved ? first : second;
+    if (target.value && target.value !== "-") {
+      target.value = String(target.value / 100);
     }
   }
 
   function clearExpression() {
+    allowNewNumber = false;
     if (first.saved && operator.unsaved && second.unsaved) {
-      reset(first);
+      resetData(first);
     }
     if (first.saved && operator.saved && second.unsaved) {
-      reset(operator);
+      resetData(operator);
     }
     if (first.saved && operator.saved && second.saved) {
-      reset(second);
+      resetData(second);
     }
     if (result) {
       result = "";
@@ -242,21 +300,43 @@ function initializeCalculator() {
     }
   }
 
-  function display(first, sign, second, result) {
+  function updateDisplay(first, sign, second, result) {
     const expressionDisplay = document.querySelector("#expression");
     const resultDisplay = document.querySelector("#result");
-    // [first, second, result].map(number => round(number));
-    expressionDisplay.textContent = `${first} ${sign} ${second}`;
-    resultDisplay.textContent = "0";
     if (result) {
-      resultDisplay.textContent = result;
+      resultDisplay.textContent = roundNumber(result);
+    } else {
+      resultDisplay.textContent = "0";
     }
-    if (result === "Error") {
-      expressionDisplay.textContent = "You cannot divide by 0"
+    if (first && first !== "-") {
+      first = roundNumber(first);
     }
+    if (second && second !== "-") {
+      second = roundNumber(second);
+    }
+    expressionDisplay.textContent = `${first} ${sign} ${second}`;
   }
 
-  function save(element, decimal = false) {
+  function roundNumber(numberString) {
+    let number = parseFloat(numberString);
+    let isInteger = number % 1 === 0;
+    let isFloat = number % 1 !== 0;
+    if (isInteger && numberString.length > 6) {
+      return number.toExponential(2);
+    }
+    if (isFloat) {
+      let [leftPart, rightPart] = numberString.split(".");
+      if (leftPart.length > 6) {
+        return number.toExponential(2);
+      }
+      if (rightPart.length > 2) {
+        return number.toFixed(2);
+      }
+    }
+    return numberString;
+  }
+
+  function saveData(element, decimal = false) {
     element.unsaved = false;
     element.saved = true;
     if (decimal) {
@@ -264,20 +344,18 @@ function initializeCalculator() {
     }
   }
 
-  function reset(element) {
+  function resetData(element) {
     for (let key in element) {
       switch (key) {
         case "value":
           element[key] = "";
           break;
+        case "integer":
         case "unsaved":
           element[key] = true;
           break;
         case "saved":
           element[key] = false;
-          break;
-        case "integer":
-          element[key] = true;
           break;
       }
     }
